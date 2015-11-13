@@ -67,11 +67,11 @@ namespace NGettextUtils
             "msgid \"\"",
             "msgstr \"\"",
             "\"Project-Id-Version: {0}\\n\"",
-            "\"Report-Msgid-Bugs-To: \\n\"",
+            "\"Report-Msgid-Bugs-To: {2}\\n\"",
             "\"POT-Creation-Date: {1}\\n\"",
-            "\"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n\"",
-            "\"Last-Translator: FULL NAME <EMAIL@ADDRESS>\\n\"",
-            "\"Language-Team: LANGUAGE <LL@li.org>\\n\"",
+            "\"PO-Revision-Date: {1}\\n\"",
+            "\"Last-Translator: {2}\\n\"",
+            "\"Language-Team: {3}\\n\"",
             "\"MIME-Version: 1.0\\n\"",
             "\"Content-Type: text/plain; charset=UTF-8\\n\"",
             "\"Content-Transfer-Encoding: 8bit\\n\"",
@@ -141,6 +141,20 @@ namespace NGettextUtils
             set { poEditor = value; }
         }
 
+        private static string poTranslator = string.Empty;
+        public static string PoTranslator
+        {
+            get { return poTranslator; }
+            set { poTranslator = value; }
+        }
+
+        private static string poTeam = string.Empty;
+        public static string PoTeam
+        {
+            get { return poTeam; }
+            set { poTeam = value; }
+        }
+
         private static List<string> IgnoreList = new List<string>();
         public static string[] Ignores
         {
@@ -181,7 +195,7 @@ namespace NGettextUtils
             return langs.ToArray();
         }
 
-        public static string xaml2po_o( string xaml, string catalog = null )
+        public static string xaml2po( string xaml, string catalog = null )
         {
             if ( !string.IsNullOrEmpty( xaml ) && File.Exists( xaml ) )
             {
@@ -259,7 +273,7 @@ namespace NGettextUtils
 
         public static string xaml2po( string[] xamlfiles, string catalog, string output = null )
         {
-            string AppPath = System.AppDomain.CurrentDomain.BaseDirectory;
+            string AppPath = AppDomain.CurrentDomain.BaseDirectory;
 
             if ( string.IsNullOrEmpty( catalog ) )
             {
@@ -401,7 +415,7 @@ namespace NGettextUtils
 
         public static string form2po( string[] csfiles, string catalog = null, string output = null )
         {
-            string AppPath = System.AppDomain.CurrentDomain.BaseDirectory;
+            string AppPath = AppDomain.CurrentDomain.BaseDirectory;
 
             if ( string.IsNullOrEmpty( catalog ) )
             {
@@ -417,12 +431,14 @@ namespace NGettextUtils
             {
                 symbol = "-";
             }
-            string   pot_date = string.Format( "{0:yyyy-MM-dd HH:mm}{3}{1:00}{2:00}", nt, no.Hours, no.Minutes, symbol );
+            string pot_date = string.Format( "{0:yyyy-MM-dd HH:mm}{3}{1:00}{2:00}", nt, no.Hours, no.Minutes, symbol );
+            string pot_translator = poTranslator;
+            string pot_team = poTeam;
 
             List<string> lines = new List<string>();
             foreach ( string s in po_header )
             {
-                lines.Add( string.Format( s, catalog, pot_date ) );
+                lines.Add( string.Format( s, catalog, pot_date, pot_translator, pot_team ) );
             }
 
             Dictionary<string, int> msgids = new Dictionary<string, int>();
@@ -669,7 +685,7 @@ namespace NGettextUtils
             }
 
             string app = string.Format( "{0}\\bin\\{1}", GettextPath, "msgfmt.exe" ).Replace( "\\\\", "\\" );
-            args.Add( $"-o {po.Replace(".po", ".mo")}" );
+            args.Add( $"-o {Path.ChangeExtension(po, ".mo")}" );
             args.Add( po );
 
             string WorkingDirectory = string.Empty;
@@ -761,7 +777,7 @@ namespace NGettextUtils
 
         public static string cs2dll( string csType, string cs, string catalog = null, string locale = "en-US" )
         {
-            string AppPath = System.AppDomain.CurrentDomain.BaseDirectory;
+            string AppPath = AppDomain.CurrentDomain.BaseDirectory;
 
             List<string> args = new List<string>();
             if ( string.IsNullOrEmpty( catalog ) )
@@ -832,6 +848,7 @@ namespace NGettextUtils
             //    startInfo.StandardOutputEncoding = Encoding.UTF8;
             //    startInfo.StandardErrorEncoding = Encoding.UTF8;
             //}
+            Log( $"{startInfo.FileName} {startInfo.Arguments}\n" );
 
             Process gettext = Process.Start( startInfo );
 
@@ -863,11 +880,14 @@ namespace NGettextUtils
                 exitcode = gettext.ExitCode;
                 gettext.Close();
             }
+            Log( "--------------------------------------------------------------\n\n" );
             return exitcode;
         }
 
-        public static void DirectoryCopy( string sourceDirName, string destDirName, bool copySubDirs=false, bool overwrite=true )
+        public static bool DirectoryCopy( string sourceDirName, string destDirName, bool copySubDirs=false, bool overwrite=true )
         {
+            if ( !Directory.Exists( sourceDirName ) ) return (false);
+
             DirectoryInfo dir = new DirectoryInfo( sourceDirName );
             DirectoryInfo[] dirs = dir.GetDirectories();
 
@@ -898,6 +918,7 @@ namespace NGettextUtils
                     DirectoryCopy( subdir.FullName, temppath, copySubDirs, overwrite );
                 }
             }
+            return ( true );
         }
 
     }
@@ -947,6 +968,12 @@ namespace NGettextUtils
             set { ProjectFile = value; }
         }
 
+        private string ProjectFolder = string.Empty;
+        public string Folder
+        {
+            get { return $"{ProjectRoot}\\{Path.GetDirectoryName( ProjectFile )}"; }
+        }
+
         private string ProjectGUID = string.Empty;
         public string GUID
         {
@@ -975,9 +1002,9 @@ namespace NGettextUtils
 
         public void Load( string project )
         {
-            string AppPath = System.AppDomain.CurrentDomain.BaseDirectory;
+            string AppPath = AppDomain.CurrentDomain.BaseDirectory;
 
-            Directory.SetCurrentDirectory( string.Format( "{0}\\{1}", ProjectRoot, Path.GetDirectoryName( project ) ) );
+            Directory.SetCurrentDirectory( Folder );
 
             string csproj = Path.GetFileName( project );
 
@@ -1121,7 +1148,7 @@ namespace NGettextUtils
         {
             if ( FileLoaded )
             {
-                Directory.SetCurrentDirectory( string.Format( "{0}\\{1}", ProjectRoot, Path.GetDirectoryName( ProjectFile ) ) );
+                Directory.SetCurrentDirectory( Folder );
                 if ( XamlFiles.Length > 0 )
                 {
                     msgidCollector.xaml2po( XamlFiles, Domain, string.Format( "{0}.pot", Domain ) );
@@ -1137,19 +1164,32 @@ namespace NGettextUtils
             }
         }
 
-        public void MakeLangPO( string locale )
+        public void MakeLangPO( string locale, bool gnu=true )
         {
             if ( !string.IsNullOrEmpty( locale ) )
             {
                 if ( FileLoaded )
                 {
+                    string localeFolder = $"{Folder}\\locale\\{locale.Replace('-', '_')}\\LC_MESSAGES";
+
                     string SrcFile = string.Empty;
                     string DstFile = string.Empty;
 
-                    Directory.SetCurrentDirectory( string.Format( "{0}\\{1}", ProjectRoot, Path.GetDirectoryName( ProjectFile ) ) );
+                    Directory.SetCurrentDirectory( Folder );
 
-                    SrcFile = string.Format( "{0}.pot", ProjectDomain );
-                    DstFile = string.Format( "{0}_{1}.po", ProjectDomain, locale );
+                    SrcFile = $"{Folder}\\{ProjectDomain}.pot";
+                    if ( gnu )
+                    {
+                        DstFile = $"{localeFolder}\\{ProjectDomain}.po";
+                    }
+                    else
+                    {
+                        DstFile = string.Format( "{0}_{1}.po", ProjectDomain, locale );
+                    }
+                    if ( !Directory.Exists( localeFolder ) )
+                    {
+                        Directory.CreateDirectory( localeFolder );
+                    }
                     if ( File.Exists( SrcFile ) )
                     {
                         if(File.Exists(DstFile))
@@ -1165,17 +1205,25 @@ namespace NGettextUtils
             }
         }
 
-        public void EditPO( string locale )
+        public void EditPO( string locale, bool gnu=true )
         {
             if ( !string.IsNullOrEmpty( locale ) )
             {
                 if ( FileLoaded )
                 {
+                    string localeFolder = $"{Folder}\\locale\\{locale.Replace('-', '_')}\\LC_MESSAGES";
+
                     string SrcFile = string.Empty;
 
-                    Directory.SetCurrentDirectory( string.Format( "{0}\\{1}", ProjectRoot, Path.GetDirectoryName( ProjectFile ) ) );
-
-                    SrcFile = string.Format( "{0}_{1}.po", ProjectDomain, locale );
+                    Directory.SetCurrentDirectory( Folder );
+                    if( gnu )
+                    {
+                        SrcFile = $"{localeFolder}\\{ProjectDomain}.po";
+                    }
+                    else
+                    {
+                        SrcFile = string.Format( "{0}_{1}.po", ProjectDomain, locale );
+                    }
                     if ( File.Exists( SrcFile ) )
                     {
                         msgidCollector.editpo( SrcFile );
@@ -1184,17 +1232,17 @@ namespace NGettextUtils
             }
         }
 
-        public void MakeLangDll( String locale )
+        public void MakeLangDll( string locale )
         {
-            if ( !String.IsNullOrEmpty( locale ) )
+            if ( !string.IsNullOrEmpty( locale ) )
             {
                 if ( FileLoaded )
                 {
-                    Directory.SetCurrentDirectory( String.Format( "{0}\\{1}", ProjectRoot, Path.GetDirectoryName( ProjectFile ) ) );
+                    Directory.SetCurrentDirectory( Folder );
 
-                    String poFile = String.Format( "{0}_{1}.po", ProjectDomain, locale );
-                    String csFile = String.Format( "{0}_{1}.cs", ProjectDomain, locale );
-                    String dllFile = String.Format( "{1}\\{0}.resources.dll", ProjectDomain, locale );
+                    string poFile = string.Format( "{0}_{1}.po", ProjectDomain, locale );
+                    string csFile = string.Format( "{0}_{1}.cs", ProjectDomain, locale );
+                    string dllFile = string.Format( "{1}\\{0}.resources.dll", ProjectDomain, locale );
                     if ( File.Exists( poFile ) )
                     {
                         if ( ProjectGUI != ProjectGUIType.NONE )
@@ -1206,8 +1254,8 @@ namespace NGettextUtils
                                 Directory.CreateDirectory( locale );
                             }
                             msgidCollector.cs2dll( GUIType, csFile, ProjectDomain, locale );
-                            msgidCollector.DirectoryCopy( locale, String.Format( "bin\\Debug\\{0}", locale ), false );
-                            msgidCollector.DirectoryCopy( locale, String.Format( "bin\\Release\\{0}", locale ), false );
+                            msgidCollector.DirectoryCopy( locale, string.Format( "bin\\Debug\\{0}", locale ), false );
+                            msgidCollector.DirectoryCopy( locale, string.Format( "bin\\Release\\{0}", locale ), false );
                         }
                     }
                 }
@@ -1220,22 +1268,23 @@ namespace NGettextUtils
             {
                 if ( FileLoaded )
                 {
-                    Directory.SetCurrentDirectory( string.Format( "{0}\\{1}", ProjectRoot, Path.GetDirectoryName( ProjectFile ) ) );
+                    Directory.SetCurrentDirectory( Folder );
 
-                    string localeFolder = $"locale\\{locale}\\LC_MESSAGES";
+                    string localeFolder = $"{Folder}\\locale\\{locale.Replace('-', '_')}\\LC_MESSAGES";
+                    string localeDst = $"locale\\{locale.Replace('-', '_')}";
                     string poFile = $"{localeFolder}\\{ProjectDomain}.po";
                     string moFile = $"{localeFolder}\\{ProjectDomain}.mo";
+                    if ( !Directory.Exists( localeFolder ) )
+                    {
+                        Directory.CreateDirectory( localeFolder );
+                    }
                     if ( File.Exists( poFile ) )
                     {
                         if ( ProjectGUI != ProjectGUIType.NONE )
                         {
-                            if ( !Directory.Exists( localeFolder ) )
-                            {
-                                Directory.CreateDirectory( localeFolder );
-                            }
                             msgidCollector.po2mo( poFile, ProjectDomain, locale );
-                            msgidCollector.DirectoryCopy( locale, $"bin\\Debug\\{locale}", false );
-                            msgidCollector.DirectoryCopy( locale, $"bin\\Release\\{locale}", false );
+                            msgidCollector.DirectoryCopy( $"{Folder}\\{localeDst}", $"{Folder}\\bin\\Debug\\{localeDst}", true );
+                            msgidCollector.DirectoryCopy( $"{Folder}\\{localeDst}", $"{Folder}\\bin\\Release\\{localeDst}", true );
                         }
                     }
                 }
@@ -1319,7 +1368,7 @@ namespace NGettextUtils
                 #region Patch .cs file
                 foreach ( string code in CodeFileList )
                 {
-                    if ( code.IndexOf( "Properties\\", StringComparison.InvariantCultureIgnoreCase ) >= 0 ) continue;
+                    if ( code.StartsWith( "Properties\\", StringComparison.InvariantCultureIgnoreCase ) ) continue;
 
                     if ( File.Exists( code ) )
                     {
@@ -1337,7 +1386,7 @@ namespace NGettextUtils
                                 csfile.Close();
                                 break;
                             }
-                            if ( line.IndexOf( gettext, StringComparison.InvariantCultureIgnoreCase ) >= 0 )
+                            if ( line.StartsWith( gettext, StringComparison.InvariantCultureIgnoreCase ) )
                             {
                                 codePatched = true;
                                 break;
@@ -1354,8 +1403,8 @@ namespace NGettextUtils
                                 cslines.AppendLine( line );
                                 if ( line.Trim().IndexOf( "InitializeComponent();", StringComparison.InvariantCultureIgnoreCase ) == 0 )
                                 {
-                                    string i18n = string.Format("            I18N i10n = new I18N( \"{0}\", this );", ProjectDomain);
-                                    string i18nalt = string.Format( "            //I18N i10n = new I18N( {0}, this );", "Path.GetFileNameWithoutExtension( Application.ExecutablePath )" );
+                                    string i18n      = string.Format( "            I18N i10n = new I18N( \"{0}\", this );", ProjectDomain);
+                                    string i18nalt   = string.Format( "            //I18N i10n = new I18N( {0}, this );", "Path.GetFileNameWithoutExtension( Application.ExecutablePath )" );
                                     string i18nusage = string.Format( "            //edMsg.Text = I18N._(\"Text Your want to translating\");" );
 
                                     cslines.AppendLine( i18n );
@@ -1515,9 +1564,9 @@ namespace NGettextUtils
             }
         }
 
-        public void MakeLangDll( String locale )
+        public void MakeLangDll( string locale )
         {
-            if ( !String.IsNullOrEmpty( locale ) )
+            if ( !string.IsNullOrEmpty( locale ) )
             {
                 if ( FileLoaded )
                 {

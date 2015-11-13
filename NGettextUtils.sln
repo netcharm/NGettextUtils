@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 14 for Windows Desktop
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NGettextUtils", "NGettextUtils\NGettextUtils.csproj", "{217F0607-A8EF-4DB7-93DB-2AD0F4F7386F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NGettext.WinForm", "NGettext.WinForm\NGettext.WinForm.csproj", "{2540BA67-116B-4C90-AA7C-0AFA7C09B47F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NGettext.WPF", "NGettext.WPF\NGettext.WPF.csproj", "{6541598B-0BA2-4E54-91C5-42E79574D9AF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{217F0607-A8EF-4DB7-93DB-2AD0F4F7386F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{217F0607-A8EF-4DB7-93DB-2AD0F4F7386F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{217F0607-A8EF-4DB7-93DB-2AD0F4F7386F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{217F0607-A8EF-4DB7-93DB-2AD0F4F7386F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2540BA67-116B-4C90-AA7C-0AFA7C09B47F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2540BA67-116B-4C90-AA7C-0AFA7C09B47F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2540BA67-116B-4C90-AA7C-0AFA7C09B47F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2540BA67-116B-4C90-AA7C-0AFA7C09B47F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6541598B-0BA2-4E54-91C5-42E79574D9AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6541598B-0BA2-4E54-91C5-42E79574D9AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6541598B-0BA2-4E54-91C5-42E79574D9AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6541598B-0BA2-4E54-91C5-42E79574D9AF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

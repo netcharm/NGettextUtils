@@ -6,12 +6,12 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: GetTextUtils\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-08 20:01+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Project-Id-Version: NGettextUtils\n"
+"Report-Msgid-Bugs-To: netcharm<netcharm@163.com>\n"
+"POT-Creation-Date: 2015-11-13 23:59+0800\n"
+"PO-Revision-Date: 2015-11-13 23:59+0800\n"
+"Last-Translator: netcharm<netcharm@163.com>\n"
+"Language-Team: netcharm<netcharm@163.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,114 +20,150 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: .\n"
 
-#: MainForm.Designer.cs:68 MainForm.Designer.cs:241
+#: MainForm.Designer.cs:71 MainForm.Designer.cs:79
 msgid "Ready"
 msgstr ""
 
-#: MainForm.Designer.cs:90
-msgid "Patch File"
-msgstr ""
-
-#: MainForm.Designer.cs:91
-msgid "Add Code/FileRef to project\\n(not recommended for senior)"
-msgstr ""
-
-#: MainForm.Designer.cs:103
-msgid "Load Solution"
-msgstr ""
-
-#: MainForm.Designer.cs:104
-msgid "Load Solution file"
-msgstr ""
-
-#: MainForm.Designer.cs:116
-msgid "Create PO"
-msgstr ""
-
-#: MainForm.Designer.cs:117
-msgid "Create locale .PO file for every project"
-msgstr ""
-
-#: MainForm.Designer.cs:129
-msgid "Create DLL"
-msgstr ""
-
-#: MainForm.Designer.cs:130
-msgid "Create locale ResourceDLL file"
-msgstr ""
-
-#: MainForm.Designer.cs:142
-msgid "Create POT"
-msgstr ""
-
-#: MainForm.Designer.cs:143
-msgid "Create .POT file for every project"
-msgstr ""
-
-#: MainForm.Designer.cs:185
-msgid "Target Locale"
-msgstr ""
-
-#: MainForm.Designer.cs:196
-msgid "Dropdown to select locale from all system supported"
-msgstr ""
-
-#: MainForm.Designer.cs:205
-msgid "CHT"
-msgstr ""
-
-#: MainForm.Designer.cs:206 MainForm.Designer.cs:218
-msgid "Most usage locale"
-msgstr ""
-
-#: MainForm.Designer.cs:217
-msgid "CHS"
-msgstr ""
-
-#: MainForm.Designer.cs:230
-msgid "Translating PO"
-msgstr ""
-
-#: MainForm.Designer.cs:231
-msgid "Open .PO Editor to translating it to locale"
-msgstr ""
-
-#: MainForm.Designer.cs:243
+#: MainForm.Designer.cs:81
 msgid "State Info"
 msgstr ""
 
-#: MainForm.Designer.cs:251
+#: MainForm.Designer.cs:110
+msgid "Translating PO"
+msgstr ""
+
+#: MainForm.Designer.cs:111
+msgid "Open .PO Editor to translating it to locale"
+msgstr ""
+
+#: MainForm.Designer.cs:121
+msgid "Patch File"
+msgstr ""
+
+#: MainForm.Designer.cs:122
+msgid "Add Code/FileRef to project\\n(not recommended for senior)"
+msgstr ""
+
+#: MainForm.Designer.cs:134
+msgid "Load Solution"
+msgstr ""
+
+#: MainForm.Designer.cs:135
+msgid "Load Solution file"
+msgstr ""
+
+#: MainForm.Designer.cs:147
+msgid "Create PO"
+msgstr ""
+
+#: MainForm.Designer.cs:148
+msgid "Create locale .PO file for every project"
+msgstr ""
+
+#: MainForm.Designer.cs:160
+msgid "Create MO"
+msgstr ""
+
+#: MainForm.Designer.cs:161
+msgid "Create locale ResourceDLL file"
+msgstr ""
+
+#: MainForm.Designer.cs:173
+msgid "Create POT"
+msgstr ""
+
+#: MainForm.Designer.cs:174
+msgid "Create .POT file for every project"
+msgstr ""
+
+#: MainForm.Designer.cs:216
+msgid "Target Locale"
+msgstr ""
+
+#: MainForm.Designer.cs:227
+msgid "Dropdown to select locale from all system supported"
+msgstr ""
+
+#: MainForm.Designer.cs:235
+msgid "CHT"
+msgstr ""
+
+#: MainForm.Designer.cs:236 MainForm.Designer.cs:249
+msgid "Most usage locale"
+msgstr ""
+
+#: MainForm.Designer.cs:248
+msgid "CHS"
+msgstr ""
+
+#: MainForm.Designer.cs:259
 msgid "Solution File:"
 msgstr ""
 
-#: MainForm.Designer.cs:260
+#: MainForm.Designer.cs:268
 msgid "Logger:"
 msgstr ""
 
-#: MainForm.Designer.cs:269
+#: MainForm.Designer.cs:277
 msgid "..."
 msgstr ""
 
-#: MainForm.Designer.cs:270
+#: MainForm.Designer.cs:278
 msgid "Browsing Directory to select Solution file."
 msgstr ""
 
-#: MainForm.Designer.cs:292
+#: MainForm.Designer.cs:295
 msgid "Solution File|*.sln|All Files|*.*"
 msgstr ""
 
-#: MainForm.Designer.cs:294
+#: MainForm.Designer.cs:297
 msgid "Open Solution File"
 msgstr ""
 
-#: MainForm.Designer.cs:313
-msgid "GNU GetText Utility"
+#: MainForm.Designer.cs:306 optionsForm.Designer.cs:249
+msgid "Options"
 msgstr ""
 
-#: MainForm.cs:24
+#: MainForm.Designer.cs:326
+msgid "NGetText Utility"
+msgstr ""
+
+#: optionsForm.Designer.cs:56
+msgid "CSC Path:"
+msgstr ""
+
+#: optionsForm.Designer.cs:98
+msgid "GNU Gettext Path:"
+msgstr ""
+
+#: optionsForm.Designer.cs:126
+msgid "poedit Path:"
+msgstr ""
+
+#: optionsForm.Designer.cs:137
+msgid "OK"
+msgstr ""
+
+#: optionsForm.Designer.cs:149
+msgid "Cancel"
+msgstr ""
+
+#: optionsForm.Designer.cs:161
+msgid "Relative Path"
+msgstr ""
+
+#: optionsForm.Designer.cs:189
+msgid "Translator:"
+msgstr ""
+
+#: optionsForm.Designer.cs:217
+msgid "Team:"
+msgstr ""
+
+#: MainForm.cs:28
 msgid "Solution must be loaded first!"
 msgstr ""
 
-#: MainForm.cs:325
+#: MainForm.cs:404
 msgid "Loaded"
 msgstr ""

@@ -14,11 +14,14 @@ namespace NGettextUtils
         private string[] cmdArgs = null;
 
         private bool firstRun = true;
+
         private string lastSolution = string.Empty;
         private string lastLocale = string.Empty;
         private string GettextPath = AppDomain.CurrentDomain.BaseDirectory + "gnugettext";
         private string GettextVersion = string.Empty;
         private string poEditor = string.Empty;
+        private string poTranslator = "FULL NAME<EMAIL@ADDRESS>";
+        private string poTeam = "LANGUAGE <LL@li.org>";
 
         private string cscPath = string.Empty;
 
@@ -110,25 +113,40 @@ namespace NGettextUtils
             if ( appSection.Settings["poEditor"] != null )
             {
                 poEditor = appSection.Settings["poEditor"].Value;
-                if ( poEditor != null )
+                if ( !string.IsNullOrEmpty( poEditor ) )
                 {
-                    if ( !string.IsNullOrEmpty( poEditor ) )
+                    if ( Path.IsPathRooted( poEditor ) )
                     {
-                        if ( Path.IsPathRooted( poEditor ) )
-                        {
-                            msgidCollector.PoEditor = string.Format( "{0}", poEditor ).Replace( "\\\\", "\\" );
-                        }
-                        else if ( string.IsNullOrEmpty( Path.GetDirectoryName( poEditor ) ) )
-                        {
-                            msgidCollector.PoEditor = string.Format( "{0}", poEditor ).Replace( "\\\\", "\\" );
-                        }
-                        else
-                        {
-                            msgidCollector.PoEditor = string.Format( "{1}\\{0}", poEditor, AppDomain.CurrentDomain.BaseDirectory ).Replace( "\\\\", "\\" );
-                        }
+                        msgidCollector.PoEditor = string.Format( "{0}", poEditor ).Replace( "\\\\", "\\" );
+                    }
+                    else if ( string.IsNullOrEmpty( Path.GetDirectoryName( poEditor ) ) )
+                    {
+                        msgidCollector.PoEditor = string.Format( "{0}", poEditor ).Replace( "\\\\", "\\" );
+                    }
+                    else
+                    {
+                        msgidCollector.PoEditor = string.Format( "{1}\\{0}", poEditor, AppDomain.CurrentDomain.BaseDirectory ).Replace( "\\\\", "\\" );
                     }
                 }
             }
+
+            if ( appSection.Settings["poTranslator"] != null )
+            {
+                if ( !string.IsNullOrEmpty( appSection.Settings["poTranslator"].Value ) )
+                {
+                    poTranslator = appSection.Settings["poTranslator"].Value;
+                }
+            }
+            //msgidCollector.PoTranslator = poTranslator;
+
+            if ( appSection.Settings["poTeam"] != null )
+            {
+                if ( !string.IsNullOrEmpty( appSection.Settings["poTeam"].Value ) )
+                {
+                    poTeam = appSection.Settings["poTeam"].Value;
+                }
+            }
+
         }
 
         private void SaveSetting()
@@ -211,6 +229,24 @@ namespace NGettextUtils
                 appSection.Settings.Add( "poEditor", poEditor );
             }
 
+            if ( appSection.Settings["poTranslator"] != null )
+            {
+                appSection.Settings["poTranslator"].Value = poTranslator;
+            }
+            else
+            {
+                appSection.Settings.Add( "poTranslator", poTranslator );
+            }
+
+            if ( appSection.Settings["poTeam"] != null )
+            {
+                appSection.Settings["poTeam"].Value = poTeam;
+            }
+            else
+            {
+                appSection.Settings.Add( "poTeam", poTeam );
+            }
+
             config.Save( ConfigurationSaveMode.Full );
         }
 
@@ -218,7 +254,7 @@ namespace NGettextUtils
         {
             InitializeComponent();
             this.Icon = Icon.ExtractAssociatedIcon( Application.ExecutablePath );
-            I18N i10n = new I18N( null, this );
+            I18N i10n = new I18N( null, this, this.toolTip );
             //I18N i10n = new I18N( Path.GetFileNameWithoutExtension( Application.ExecutablePath ), this );
             InitUI();
         }
@@ -229,8 +265,8 @@ namespace NGettextUtils
 
             InitializeComponent();
             this.Icon = Icon.ExtractAssociatedIcon( Application.ExecutablePath );
-            //I18N i10n = new I18N( "GetTextUtils", this );
-            I18N i10n = new I18N( "GetTextUtils", this, this.toolTip, new object[] { this.dlgOpen } );
+            //I18N i10n = new I18N( "NGetTextUtils", this, this.toolTip );
+            I18N i10n = new I18N( Path.GetFileNameWithoutExtension( Application.ExecutablePath ), this, this.toolTip );
             //I18N i10n = new I18N( Path.GetFileNameWithoutExtension( Application.ExecutablePath ), this, this.toolTip, new object[] { this.dlgOpen } );
         }
 
@@ -314,6 +350,11 @@ namespace NGettextUtils
 
             msgidCollector.AppLog = edLog;
 
+            msgidCollector.cscPath = cscPath;
+            msgidCollector.GettextPath = GettextPath;
+            msgidCollector.PoEditor = poEditor;
+            msgidCollector.PoTranslator = poTranslator;
+            msgidCollector.PoTeam = poTeam;
         }
 
         private void LockUI()
@@ -466,6 +507,8 @@ namespace NGettextUtils
             form.cscPath = cscPath;
             form.gnugettextPath = GettextPath;
             form.poeditPath = poEditor;
+            form.poTranslator = poTranslator;
+            form.poTeam = poTeam;
 
             DialogResult dlgResult = form.ShowDialog();
             //form.StartPosition = FormStartPosition.CenterParent;
@@ -479,6 +522,14 @@ namespace NGettextUtils
                 cscPath = form.cscPath;
                 GettextPath = form.gnugettextPath;
                 poEditor = form.poeditPath;
+                poTranslator = form.poTranslator;
+                poTeam = form.poTeam;
+
+                msgidCollector.cscPath = cscPath;
+                msgidCollector.GettextPath = GettextPath;
+                msgidCollector.PoEditor = poEditor;
+                msgidCollector.PoTranslator = poTranslator;
+                msgidCollector.PoTeam = poTeam;
             }
             form.Dispose();
         }

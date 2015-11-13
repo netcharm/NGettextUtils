@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GetTextUtils\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-08 20:01+0800\n"
-"PO-Revision-Date: 2015-11-13 10:41+0800\n"
+"Report-Msgid-Bugs-To: netcharm<netcharm@163.com>\n"
+"POT-Creation-Date: 2015-11-13 23:59+0800\n"
+"PO-Revision-Date: 2015-11-14 00:05+0800\n"
 "Last-Translator: netcharm <netcharm@163.com>\n"
 "Language-Team: netcharm <netcharm@163.com>\n"
 "MIME-Version: 1.0\n"
@@ -19,17 +19,28 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: ..\\..\\..\\..\n"
 
-#: MainForm.Designer.cs:68
-#: MainForm.Designer.cs:241
+#: MainForm.Designer.cs:71
+#: MainForm.Designer.cs:79
 msgid "Ready"
 msgstr "就绪"
 
-#: MainForm.Designer.cs:90
+#: MainForm.Designer.cs:81
+msgid "State Info"
+msgstr "状态信息"
+
+#: MainForm.Designer.cs:110
+msgid "Translating PO"
+msgstr "打开PO翻译"
+
+#: MainForm.Designer.cs:111
+msgid "Open .PO Editor to translating it to locale"
+msgstr "使用.PO关联的编辑器打开指定语言的本地化文件以便翻译"
+
+#: MainForm.Designer.cs:121
 msgid "Patch File"
 msgstr "文件打补丁"
 
-#: MainForm.Designer.cs:91
-#, fuzzy
+#: MainForm.Designer.cs:122
 msgid ""
 "Add Code/FileRef to project\\n"
 "(not recommended for senior)"
@@ -37,107 +48,130 @@ msgstr ""
 "添加所需的代码和参考库文件到项目\\n"
 "(熟练人员不推荐)"
 
-#: MainForm.Designer.cs:103
+#: MainForm.Designer.cs:134
 msgid "Load Solution"
 msgstr "载入解决方案"
 
-#: MainForm.Designer.cs:104
+#: MainForm.Designer.cs:135
 msgid "Load Solution file"
 msgstr "载入解决方案文件"
 
-#: MainForm.Designer.cs:116
+#: MainForm.Designer.cs:147
 msgid "Create PO"
 msgstr "生成PO文件"
 
-#: MainForm.Designer.cs:117
+#: MainForm.Designer.cs:148
 msgid "Create locale .PO file for every project"
 msgstr "为解决方案中的每个项目生成指定语言的本地化.PO文件"
 
-#: MainForm.Designer.cs:129
-msgid "Create DLL"
-msgstr "生成资源DLL"
+#: MainForm.Designer.cs:160
+msgid "Create MO"
+msgstr "生成MO文件"
 
-#: MainForm.Designer.cs:130
+#: MainForm.Designer.cs:161
 msgid "Create locale ResourceDLL file"
 msgstr "为解决方案中的每个项目生成指定语言的本地化资源DLL文件"
 
-#: MainForm.Designer.cs:142
+#: MainForm.Designer.cs:173
 msgid "Create POT"
 msgstr "生成POT文件"
 
-#: MainForm.Designer.cs:143
+#: MainForm.Designer.cs:174
 msgid "Create .POT file for every project"
 msgstr "为解决方案中的每个项目生成指定语言的.POT模板文件"
 
-#: MainForm.Designer.cs:185
+#: MainForm.Designer.cs:216
 msgid "Target Locale"
 msgstr "目标语言"
 
-#: MainForm.Designer.cs:196
-#, fuzzy
+#: MainForm.Designer.cs:227
 msgid "Dropdown to select locale from all system supported"
 msgstr "下拉从系统支持的全部语言中选择目标语言"
 
-#: MainForm.Designer.cs:205
+#: MainForm.Designer.cs:235
 msgid "CHT"
 msgstr "繁体中文"
 
-#: MainForm.Designer.cs:206
-#: MainForm.Designer.cs:218
-#, fuzzy
+#: MainForm.Designer.cs:236
+#: MainForm.Designer.cs:249
 msgid "Most usage locale"
 msgstr "常用语言"
 
-#: MainForm.Designer.cs:217
+#: MainForm.Designer.cs:248
 msgid "CHS"
 msgstr "简体中文"
 
-#: MainForm.Designer.cs:230
-msgid "Translating PO"
-msgstr "打开PO翻译"
-
-#: MainForm.Designer.cs:231
-msgid "Open .PO Editor to translating it to locale"
-msgstr "使用.PO关联的编辑器打开指定语言的本地化文件以便翻译"
-
-#: MainForm.Designer.cs:243
-msgid "State Info"
-msgstr "状态信息"
-
-#: MainForm.Designer.cs:251
+#: MainForm.Designer.cs:259
 msgid "Solution File:"
 msgstr "解决方案文件:"
 
-#: MainForm.Designer.cs:260
+#: MainForm.Designer.cs:268
 msgid "Logger:"
 msgstr "输出信息显示:"
 
-#: MainForm.Designer.cs:269
+#: MainForm.Designer.cs:277
 msgid "..."
 msgstr ""
 
-#: MainForm.Designer.cs:270
+#: MainForm.Designer.cs:278
 msgid "Browsing Directory to select Solution file."
 msgstr "浏览目录以选择解决方案文件"
 
-#: MainForm.Designer.cs:292
+#: MainForm.Designer.cs:295
 msgid "Solution File|*.sln|All Files|*.*"
 msgstr "解决方案文件|*.sln|所有文件|*.*"
 
-#: MainForm.Designer.cs:294
-#, fuzzy
+#: MainForm.Designer.cs:297
 msgid "Open Solution File"
 msgstr "打开解决方案文件"
 
-#: MainForm.Designer.cs:313
-msgid "GNU GetText Utility"
-msgstr "GNUGetText for Microsoft.Net C# 辅助小工具"
+#: MainForm.Designer.cs:306
+#: optionsForm.Designer.cs:249
+msgid "Options"
+msgstr "设定"
 
-#: MainForm.cs:24
+#: MainForm.Designer.cs:326
+msgid "NGetText Utility"
+msgstr "NGetText for Microsoft.Net C# 辅助小工具"
+
+#: optionsForm.Designer.cs:56
+msgid "CSC Path:"
+msgstr "CSC 路径:"
+
+#: optionsForm.Designer.cs:98
+msgid "GNU Gettext Path:"
+msgstr "GNU Gettext 路径:"
+
+#: optionsForm.Designer.cs:126
+msgid "poedit Path:"
+msgstr "poedit 路径:"
+
+#: optionsForm.Designer.cs:137
+msgid "OK"
+msgstr "确认"
+
+#: optionsForm.Designer.cs:149
+msgid "Cancel"
+msgstr "取消"
+
+#: optionsForm.Designer.cs:161
+msgid "Relative Path"
+msgstr "使用相对路径"
+
+#: optionsForm.Designer.cs:189
+#| msgid "Translating PO"
+msgid "Translator:"
+msgstr "翻译人员"
+
+#: optionsForm.Designer.cs:217
+msgid "Team:"
+msgstr "翻译小组:"
+
+#: MainForm.cs:28
 msgid "Solution must be loaded first!"
 msgstr "必须先载入解决方案文件!"
 
-#: MainForm.cs:325
+#: MainForm.cs:404
 msgid "Loaded"
 msgstr "已载入"
 
