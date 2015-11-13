@@ -26,31 +26,31 @@ namespace NGettext.WinForm
         /// Constructor.
         /// </summary>
         /// <param name="domain">the locale domain, and form object</param>
-        public I18N(String domain, object myObject)
+        public I18N( string domain, object myObject)
         {
             BindDomain(domain);
             Translate(myObject);
         }
 
-        public I18N(String domain, object myObject, ToolTip tooltip)
+        public I18N( string domain, object myObject, ToolTip tooltip)
         {
             BindDomain(domain);
             Translate(myObject, tooltip);
         }
 
-        public I18N(String domain, object myObject, object[] extra)
+        public I18N( string domain, object myObject, object[] extra)
         {
             BindDomain(domain);
             Translate(myObject, extra);
         }
 
-        public I18N(String domain, object myObject, ToolTip tooltip, object[] extra)
+        public I18N( string domain, object myObject, ToolTip tooltip, object[] extra)
         {
             BindDomain(domain);
             Translate(myObject, tooltip, extra);
         }
 
-        public static void L10N(String domain, object myObject)
+        public static void L10N( string domain, object myObject)
         {
             BindDomain(domain);
             Translate(myObject);
@@ -171,7 +171,7 @@ namespace NGettext.WinForm
             #region Translating myObject
             if (myObject != null)
             {
-                String objtype = myObject.GetType().ToString();
+                string objtype = myObject.GetType().ToString();
                 if (objtype.IndexOf("Forms.ToolStripContainer", StringComparison.InvariantCultureIgnoreCase) >= 0)
                 {
                     //continue;
@@ -261,7 +261,7 @@ namespace NGettext.WinForm
                     foreach (ToolStripItem Item in tools.Items)
                     {
                         Item.Text = _(Item.Text);
-                        String itemType = Item.GetType().ToString();
+                        string itemType = Item.GetType().ToString();
                         if (
                             (itemType.IndexOf("Forms.ToolStripMenuItem", StringComparison.InvariantCultureIgnoreCase) >= 0) ||
                             (itemType.IndexOf("Forms.ToolStripDropDownButton", StringComparison.InvariantCultureIgnoreCase) >= 0) ||
@@ -279,13 +279,13 @@ namespace NGettext.WinForm
                     {
                         try
                         {
-                            if (!String.IsNullOrEmpty(obj.Text))
+                            if (!string.IsNullOrEmpty(obj.Text))
                             {
                                 obj.Text = _(obj.Text);
                             }
                             if (tooltip != null)
                             {
-                                if (!String.IsNullOrEmpty(obj.Text))
+                                if (!string.IsNullOrEmpty(obj.Text))
                                 {
                                     tooltip.ToolTipTitle = obj.Text;
                                 }
