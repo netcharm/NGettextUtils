@@ -26,13 +26,13 @@ namespace NGettext.WPF
         /// Constructor.
         /// </summary>
         /// <param name="domain">the locale domain, and form object</param>
-        public I18N(String domain, object myObject)
+        public I18N( string domain, object myObject)
         {
             BindDomain(domain);
             Translate(myObject);
         }
 
-        public static void L10N(String domain, object myObject)
+        public static void L10N( string domain, object myObject)
         {
             BindDomain(domain);
             Translate(myObject);
@@ -162,7 +162,7 @@ namespace NGettext.WPF
                     if ((prop != null) && (prop.CanRead) && (prop.CanWrite))
                     {
                         //if ( (prop.PropertyType.Name == "String") || (prop.GetValue( myObject, null ) is String))
-                        if (prop.GetValue(myObject, null) is String)
+                        if ( prop.GetValue( myObject, null ) is string )
                         {
                             propValue = prop.GetValue(myObject, null).ToString();
                             if (propValue != null)
