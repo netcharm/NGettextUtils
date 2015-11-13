@@ -1,0 +1,738 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NGettext</name>
+    </assembly>
+    <members>
+        <member name="T:NGettext.Catalog">
+            <summary>
+            Represents a Gettext catalog instance.
+            Loads translations from gettext *.mo files.
+            </summary>
+        </member>
+        <member name="M:NGettext.Catalog.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:NGettext.Catalog"/> class with no translations and with current CultureInfo.
+            </summary>
+        </member>
+        <member name="M:NGettext.Catalog.#ctor(System.Globalization.CultureInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NGettext.Catalog"/> class with no translations and with given CultureInfo.
+            </summary>
+            <param name="cultureInfo">Culture info</param>
+        </member>
+        <member name="M:NGettext.Catalog.#ctor(System.IO.Stream)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NGettext.Catalog"/> class with current CultureInfo
+            and loads MO translations from given stream.
+            </summary>
+            <param name="moStream">Stream that contain binary data in the MO file format</param>
+        </member>
+        <member name="M:NGettext.Catalog.#ctor(System.IO.Stream,System.Globalization.CultureInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NGettext.Catalog"/> class with given CultureInfo
+            and loads MO translations from given stream.
+            </summary>
+            <param name="moStream">Stream that contain binary data in the MO file format</param>
+            <param name="cultureInfo">Culture info</param>
+        </member>
+        <member name="M:NGettext.Catalog.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NGettext.Catalog"/> class with current CultureInfo
+            and loads translations from MO file that can be found by given parameters.
+            </summary>
+            <param name="domain">Catalog domain name</param>
+            <param name="localeDir">Directory that contains gettext localization files</param>
+        </member>
+        <member name="M:NGettext.Catalog.#ctor(System.String,System.String,System.Globalization.CultureInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NGettext.Catalog"/> class with given CultureInfo
+            and loads translations from MO file that can be found by given parameters.
+            </summary>
+            <param name="domain">Catalog domain name</param>
+            <param name="localeDir">Directory that contains gettext localization files</param>
+            <param name="cultureInfo">Culture info</param>
+        </member>
+        <member name="M:NGettext.Catalog.Load(System.Globalization.CultureInfo,System.String,System.String)">
+            <summary>
+            Load translations from MO file that can be found by given parameters.
+            </summary>
+            <param name="cultureInfo">Culture info</param>
+            <param name="domain">Catalog domain name</param>
+            <param name="localeDir">Directory that contains gettext localization files</param>
+        </member>
+        <member name="M:NGettext.Catalog.Load(System.String)">
+            <summary>
+            Load translations from MO file that can be found by given path.
+            </summary>
+            <param name="path">Path to *.mo file</param>
+        </member>
+        <member name="M:NGettext.Catalog.Load(System.IO.Stream,System.Text.Encoding)">
+            <summary>
+            Load translations from given MO file stream using given encoding.
+            </summary>
+            <remarks>
+            By default, parser will try to detect file encoding automatically with fallback to UTF-8 encoding.
+            If you specify any encoding in this method, auto-detect will be turned off and given encoding will be used instead.
+            </remarks>
+            <param name="moStream">Stream that contain binary data in the MO file format</param>
+            <param name="encoding">File encoding (auto detect by default)</param>
+        </member>
+        <member name="T:NGettext.ICatalog">
+            <summary>
+            Represents a Gettext catalog instance.
+            </summary>
+        </member>
+        <member name="M:NGettext.ICatalog.GetString(System.String)">
+            <summary>
+            Returns <paramref name="text"/> translated into the selected language.
+            Similar to <c>gettext</c> function.
+            </summary>
+            <param name="text">Text to translate.</param>
+            <returns>Translated text.</returns>
+        </member>
+        <member name="M:NGettext.ICatalog.GetString(System.String,System.Object[])">
+            <summary>
+            Returns <paramref name="text"/> translated into the selected language.
+            Similar to <c>gettext</c> function.
+            </summary>
+            <param name="text">Text to translate.</param>
+            <param name="args">Optional arguments for <see cref="M:System.String.Format(System.String,System.Object[])"/> method.</param>
+            <returns>Translated text.</returns>
+        </member>
+        <member name="M:NGettext.ICatalog.GetPluralString(System.String,System.String,System.Int64)">
+            <summary>
+            Returns the plural form for <paramref name="n"/> of the translation of <paramref name="text"/>.
+            Similar to <c>ngettext</c> function.
+            </summary>
+            <param name="text">Singular form of message to translate.</param>
+            <param name="pluralText">Plural form of message to translate.</param>
+            <param name="n">Value that determines the plural form.</param>
+            <returns>Translated text.</returns>
+        </member>
+        <member name="M:NGettext.ICatalog.GetPluralString(System.String,System.String,System.Int64,System.Object[])">
+            <summary>
+            Returns the plural form for <paramref name="n"/> of the translation of <paramref name="text"/>.
+            Similar to <c>ngettext</c> function.
+            </summary>
+            <param name="text">Singular form of message to translate.</param>
+            <param name="pluralText">Plural form of message to translate.</param>
+            <param name="n">Value that determines the plural form.</param>
+            <param name="args">Optional arguments for <see cref="M:System.String.Format(System.String,System.Object[])"/> method.</param>
+            <returns>Translated text.</returns>
+        </member>
+        <member name="M:NGettext.ICatalog.GetParticularString(System.String,System.String)">
+            <summary>
+            Returns <paramref name="text"/> translated into the selected language using given <paramref name="context"/>.
+            Similar to <c>pgettext</c> function.
+            </summary>
+            <param name="context">Context.</param>
+            <param name="text">Text to translate.</param>
+            <returns>Translated text.</returns>
+        </member>
+        <member name="M:NGettext.ICatalog.GetParticularString(System.String,System.String,System.Object[])">
+            <summary>
+            Returns <paramref name="text"/> translated into the selected language using given <paramref name="context"/>.
+            Similar to <c>pgettext</c> function.
+            </summary>
+            <param name="context">Context.</param>
+            <param name="text">Text to translate.</param>
+            <param name="args">Optional arguments for <see cref="M:System.String.Format(System.String,System.Object[])"/> method.</param>
+            <returns>Translated text.</returns>
+        </member>
+        <member name="M:NGettext.ICatalog.GetParticularPluralString(System.String,System.String,System.String,System.Int64)">
+            <summary>
+            Returns the plural form for <paramref name="n"/> of the translation of <paramref name="text"/> using given <paramref name="context"/>.
+            Similar to <c>npgettext</c> function.
+            </summary>
+            <param name="context">Context.</param>
+            <param name="text">Singular form of message to translate.</param>
+            <param name="pluralText">Plural form of message to translate.</param>
+            <param name="n">Value that determines the plural form.</param>
+            <returns>Translated text.</returns>
+        </member>
+        <member name="M:NGettext.ICatalog.GetParticularPluralString(System.String,System.String,System.String,System.Int64,System.Object[])">
+            <summary>
+            Returns the plural form for <paramref name="n"/> of the translation of <paramref name="text"/> using given <paramref name="context"/>.
+            Similar to <c>npgettext</c> function.
+            </summary>
+            <param name="context">Context.</param>
+            <param name="text">Singular form of message to translate.</param>
+            <param name="pluralText">Plural form of message to translate.</param>
+            <param name="n">Value that determines the plural form.</param>
+            <param name="args">Optional arguments for <see cref="M:System.String.Format(System.String,System.Object[])"/> method.</param>
+            <returns>Translated text.</returns>
+        </member>
+        <member name="T:NGettext.Loaders.BigEndianBinaryReader">
+            <summary>
+            Reads primitive data types as binary values represented in big endian byte order.
+            </summary>
+        </member>
+        <member name="M:NGettext.Loaders.BigEndianBinaryReader.#ctor(System.IO.Stream)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NGettext.Loaders.BigEndianBinaryReader"/> class based on the 
+            supplied stream and using System.Text.UTF8Encoding.
+            </summary>
+            <param name="input"></param>
+        </member>
+        <member name="M:NGettext.Loaders.BigEndianBinaryReader.#ctor(System.IO.Stream,System.Text.Encoding)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NGettext.Loaders.BigEndianBinaryReader"/> class based on the
+            supplied stream and a specific character encoding.
+            </summary>
+            <param name="input"></param>
+            <param name="encoding"></param>
+        </member>
+        <member name="M:NGettext.Loaders.BigEndianBinaryReader.ReadInt16">
+            <summary>
+            Reads a 2-byte signed integer from the current 
+            stream and advances the current position of the stream by two bytes.
+            </summary>
+            <returns>
+            A 2-byte signed integer read from the current stream.
+            </returns>
+            <exception cref="T:System.IO.EndOfStreamException">The end of the stream is reached. </exception>
+            <exception cref="T:System.ObjectDisposedException">The stream is closed. </exception>
+            <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="M:NGettext.Loaders.BigEndianBinaryReader.ReadUInt16">
+            <summary>
+            Reads a 2-byte unsigned integer from the current 
+            stream using little-endian encoding and advances the position of the stream by two bytes.
+            </summary>
+            <returns>
+            A 2-byte unsigned integer read from this stream.
+            </returns>
+            <exception cref="T:System.IO.EndOfStreamException">The end of the stream is reached. </exception>
+            <exception cref="T:System.ObjectDisposedException">The stream is closed. </exception>
+            <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="M:NGettext.Loaders.BigEndianBinaryReader.ReadInt32">
+            <summary>
+            Reads a 4-byte signed integer from the current 
+            stream and advances the current position of the stream by four bytes.
+            </summary>
+            <returns>
+            A 4-byte signed integer read from the current stream.
+            </returns>
+            <exception cref="T:System.IO.EndOfStreamException">The end of the stream is reached. </exception>
+            <exception cref="T:System.ObjectDisposedException">The stream is closed. </exception>
+            <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="M:NGettext.Loaders.BigEndianBinaryReader.ReadUInt32">
+            <summary>
+            Reads a 4-byte unsigned integer from the current 
+            stream and advances the position of the stream by four bytes.
+            </summary>
+            <returns>
+            A 4-byte unsigned integer read from this stream.
+            </returns>
+            <exception cref="T:System.IO.EndOfStreamException">The end of the stream is reached. </exception>
+            <exception cref="T:System.ObjectDisposedException">The stream is closed. </exception>
+            <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="M:NGettext.Loaders.BigEndianBinaryReader.ReadInt64">
+            <summary>
+            Reads an 8-byte signed integer from the current 
+            stream and advances the current position of the stream by eight bytes.
+            </summary>
+            <returns>
+            An 8-byte signed integer read from the current stream.
+            </returns>
+            <exception cref="T:System.IO.EndOfStreamException">The end of the stream is reached. </exception>
+            <exception cref="T:System.ObjectDisposedException">The stream is closed. </exception>
+            <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="M:NGettext.Loaders.BigEndianBinaryReader.ReadUInt64">
+            <summary>
+            Reads an 8-byte unsigned integer from the current 
+            stream and advances the position of the stream by eight bytes.
+            </summary>
+            <returns>
+            An 8-byte unsigned integer read from this stream.
+            </returns>
+            <exception cref="T:System.IO.EndOfStreamException">The end of the stream is reached. </exception>
+            <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
+            <exception cref="T:System.ObjectDisposedException">The stream is closed. </exception>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="M:NGettext.Loaders.BigEndianBinaryReader.ReadSingle">
+            <summary>
+            Reads a 4-byte floating point value from the current 
+            stream and advances the current position of the stream by four bytes.
+            </summary>
+            <returns>
+            A 4-byte floating point value read from the current stream.
+            </returns>
+            <exception cref="T:System.IO.EndOfStreamException">The end of the stream is reached. </exception>
+            <exception cref="T:System.ObjectDisposedException">The stream is closed. </exception>
+            <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="M:NGettext.Loaders.BigEndianBinaryReader.ReadDouble">
+            <summary>
+            Reads an 8-byte floating point value from the current 
+            stream and advances the current position of the stream by eight bytes.
+            </summary>
+            <returns>
+            An 8-byte floating point value read from the current stream.
+            </returns>
+            <exception cref="T:System.IO.EndOfStreamException">The end of the stream is reached. </exception>
+            <exception cref="T:System.ObjectDisposedException">The stream is closed. </exception>
+            <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="T:NGettext.Loaders.ReadOnlyStreamWrapper">
+            <summary>
+            Stream wrapper that prevents closing and writing to underlying stream.
+            </summary>
+        </member>
+        <member name="P:NGettext.Loaders.ReadOnlyStreamWrapper.BaseStream">
+            <summary>
+            Gets or sets the underlying stream.
+            </summary>
+        </member>
+        <member name="M:NGettext.Loaders.ReadOnlyStreamWrapper.#ctor(System.IO.Stream)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NGettext.Loaders.ReadOnlyStreamWrapper"/> class that wraps specified underlying stream.
+            </summary>
+            <param name="baseStream"></param>
+        </member>
+        <member name="M:NGettext.Loaders.ReadOnlyStreamWrapper.Flush">
+            <summary>
+            When overridden in a derived class, clears all buffers for this stream and causes any buffered data to be written to the underlying device.
+            </summary>
+            <exception cref="T:System.IO.IOException">An I/O error occurs. </exception><filterpriority>2</filterpriority>
+        </member>
+        <member name="M:NGettext.Loaders.ReadOnlyStreamWrapper.Seek(System.Int64,System.IO.SeekOrigin)">
+            <summary>
+            When overridden in a derived class, sets the position within the current stream.
+            </summary>
+            <returns>
+            The new position within the current stream.
+            </returns>
+            <param name="offset">A byte offset relative to the <paramref name="origin"/> parameter. </param><param name="origin">A value of type <see cref="T:System.IO.SeekOrigin"/> indicating the reference point used to obtain the new position. </param><exception cref="T:System.IO.IOException">An I/O error occurs. </exception><exception cref="T:System.NotSupportedException">The stream does not support seeking, such as if the stream is constructed from a pipe or console output. </exception><exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed. </exception><filterpriority>1</filterpriority>
+        </member>
+        <member name="M:NGettext.Loaders.ReadOnlyStreamWrapper.SetLength(System.Int64)">
+            <summary>
+            When overridden in a derived class, sets the length of the current stream.
+            </summary>
+            <param name="value">The desired length of the current stream in bytes. </param><exception cref="T:System.IO.IOException">An I/O error occurs. </exception><exception cref="T:System.NotSupportedException">The stream does not support both writing and seeking, such as if the stream is constructed from a pipe or console output. </exception><exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed. </exception><filterpriority>2</filterpriority>
+        </member>
+        <member name="M:NGettext.Loaders.ReadOnlyStreamWrapper.Read(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            When overridden in a derived class, reads a sequence of bytes from the current stream and advances the position within the stream by the number of bytes read.
+            </summary>
+            <returns>
+            The total number of bytes read into the buffer. This can be less than the number of bytes requested if that many bytes are not currently available, or zero (0) if the end of the stream has been reached. 
+            </returns>
+            <param name="buffer">An array of bytes. When this method returns, the buffer contains the specified byte array with the values between <paramref name="offset"/> and (<paramref name="offset"/> + <paramref name="count"/> - 1) replaced by the bytes read from the current source. </param><param name="offset">The zero-based byte offset in <paramref name="buffer"/> at which to begin storing the data read from the current stream. </param><param name="count">The maximum number of bytes to be read from the current stream. </param><exception cref="T:System.ArgumentException">The sum of <paramref name="offset"/> and <paramref name="count"/> is larger than the buffer length. </exception><exception cref="T:System.ArgumentNullException"><paramref name="buffer"/> is null. </exception><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="offset"/> or <paramref name="count"/> is negative. </exception><exception cref="T:System.IO.IOException">An I/O error occurs. </exception><exception cref="T:System.NotSupportedException">The stream does not support reading. </exception><exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed. </exception><filterpriority>1</filterpriority>
+        </member>
+        <member name="M:NGettext.Loaders.ReadOnlyStreamWrapper.Write(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            When overridden in a derived class, writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written.
+            </summary>
+            <param name="buffer">An array of bytes. This method copies <paramref name="count"/> bytes from <paramref name="buffer"/> to the current stream. </param><param name="offset">The zero-based byte offset in <paramref name="buffer"/> at which to begin copying bytes to the current stream. </param><param name="count">The number of bytes to be written to the current stream. </param><filterpriority>1</filterpriority>
+        </member>
+        <member name="P:NGettext.Loaders.ReadOnlyStreamWrapper.CanRead">
+            <summary>
+            When overridden in a derived class, gets a value indicating whether the current stream supports reading.
+            </summary>
+            <returns>
+            true if the stream supports reading; otherwise, false.
+            </returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="P:NGettext.Loaders.ReadOnlyStreamWrapper.CanSeek">
+            <summary>
+            When overridden in a derived class, gets a value indicating whether the current stream supports seeking.
+            </summary>
+            <returns>
+            true if the stream supports seeking; otherwise, false.
+            </returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="P:NGettext.Loaders.ReadOnlyStreamWrapper.CanWrite">
+            <summary>
+            When overridden in a derived class, gets a value indicating whether the current stream supports writing.
+            </summary>
+            <returns>
+            true if the stream supports writing; otherwise, false.
+            </returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="P:NGettext.Loaders.ReadOnlyStreamWrapper.Length">
+            <summary>
+            When overridden in a derived class, gets the length in bytes of the stream.
+            </summary>
+            <returns>
+            A long value representing the length of the stream in bytes.
+            </returns>
+            <exception cref="T:System.NotSupportedException">A class derived from Stream does not support seeking. </exception><exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed. </exception><filterpriority>1</filterpriority>
+        </member>
+        <member name="P:NGettext.Loaders.ReadOnlyStreamWrapper.Position">
+            <summary>
+            When overridden in a derived class, gets or sets the position within the current stream.
+            </summary>
+            <returns>
+            The current position within the stream.
+            </returns>
+            <exception cref="T:System.IO.IOException">An I/O error occurs. </exception><exception cref="T:System.NotSupportedException">The stream does not support seeking. </exception><exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed. </exception><filterpriority>1</filterpriority>
+        </member>
+        <member name="M:NGettext.Loaders.ReadOnlyStreamWrapper.BeginRead(System.Byte[],System.Int32,System.Int32,System.AsyncCallback,System.Object)">
+            <summary>
+            Begins an asynchronous read operation.
+            </summary>
+            <returns>
+            An <see cref="T:System.IAsyncResult"/> that represents the asynchronous read, which could still be pending.
+            </returns>
+            <param name="buffer">The buffer to read the data into. </param><param name="offset">The byte offset in <paramref name="buffer"/> at which to begin writing data read from the stream. </param><param name="count">The maximum number of bytes to read. </param><param name="callback">An optional asynchronous callback, to be called when the read is complete. </param><param name="state">A user-provided object that distinguishes this particular asynchronous read request from other requests. </param><exception cref="T:System.IO.IOException">Attempted an asynchronous read past the end of the stream, or a disk error occurs. </exception><exception cref="T:System.ArgumentException">One or more of the arguments is invalid. </exception><exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed. </exception><exception cref="T:System.NotSupportedException">The current Stream implementation does not support the read operation. </exception><filterpriority>2</filterpriority>
+        </member>
+        <member name="M:NGettext.Loaders.ReadOnlyStreamWrapper.BeginWrite(System.Byte[],System.Int32,System.Int32,System.AsyncCallback,System.Object)">
+            <summary>
+            Begins an asynchronous write operation.
+            </summary>
+            <returns>
+            An IAsyncResult that represents the asynchronous write, which could still be pending.
+            </returns>
+            <param name="buffer">The buffer to write data from. </param><param name="offset">The byte offset in <paramref name="buffer"/> from which to begin writing. </param><param name="count">The maximum number of bytes to write. </param><param name="callback">An optional asynchronous callback, to be called when the write is complete. </param><param name="state">A user-provided object that distinguishes this particular asynchronous write request from other requests. </param><exception cref="T:System.IO.IOException">Attempted an asynchronous write past the end of the stream, or a disk error occurs. </exception><exception cref="T:System.ArgumentException">One or more of the arguments is invalid. </exception><exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed. </exception><exception cref="T:System.NotSupportedException">The current Stream implementation does not support the write operation. </exception><filterpriority>2</filterpriority>
+        </member>
+        <member name="M:NGettext.Loaders.ReadOnlyStreamWrapper.EndRead(System.IAsyncResult)">
+            <summary>
+            Waits for the pending asynchronous read to complete.
+            </summary>
+            <returns>
+            The number of bytes read from the stream, between zero (0) and the number of bytes you requested. Streams return zero (0) only at the end of the stream, otherwise, they should block until at least one byte is available.
+            </returns>
+            <param name="asyncResult">The reference to the pending asynchronous request to finish. </param><exception cref="T:System.ArgumentNullException"><paramref name="asyncResult"/> is null. </exception><exception cref="T:System.ArgumentException"><paramref name="asyncResult"/> did not originate from a <see cref="M:System.IO.Stream.BeginRead(System.Byte[],System.Int32,System.Int32,System.AsyncCallback,System.Object)"/> method on the current stream. </exception><exception cref="T:System.IO.IOException">The stream is closed or an internal error has occurred.</exception><filterpriority>2</filterpriority>
+        </member>
+        <member name="M:NGettext.Loaders.ReadOnlyStreamWrapper.EndWrite(System.IAsyncResult)">
+            <summary>
+            Ends an asynchronous write operation.
+            </summary>
+            <param name="asyncResult">A reference to the outstanding asynchronous I/O request. </param><exception cref="T:System.ArgumentNullException"><paramref name="asyncResult"/> is null. </exception><exception cref="T:System.ArgumentException"><paramref name="asyncResult"/> did not originate from a <see cref="M:System.IO.Stream.BeginWrite(System.Byte[],System.Int32,System.Int32,System.AsyncCallback,System.Object)"/> method on the current stream. </exception><exception cref="T:System.IO.IOException">The stream is closed or an internal error has occurred.</exception><filterpriority>2</filterpriority>
+        </member>
+        <member name="M:NGettext.Loaders.ReadOnlyStreamWrapper.ReadByte">
+            <summary>
+            Reads a byte from the stream and advances the position within the stream by one byte, or returns -1 if at the end of the stream.
+            </summary>
+            <returns>
+            The unsigned byte cast to an Int32, or -1 if at the end of the stream.
+            </returns>
+            <exception cref="T:System.NotSupportedException">The stream does not support reading. </exception><exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed. </exception><filterpriority>2</filterpriority>
+        </member>
+        <member name="M:NGettext.Loaders.ReadOnlyStreamWrapper.WriteByte(System.Byte)">
+            <summary>
+            Writes a byte to the current position in the stream and advances the position within the stream by one byte.
+            </summary>
+            <param name="value">The byte to write to the stream. </param><exception cref="T:System.IO.IOException">An I/O error occurs. </exception><exception cref="T:System.NotSupportedException">The stream does not support writing, or the stream is already closed. </exception><exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed. </exception><filterpriority>2</filterpriority>
+        </member>
+        <member name="M:NGettext.Loaders.ReadOnlyStreamWrapper.Close">
+            <summary>
+            Closes the current stream and releases any resources (such as sockets and file handles) associated with the current stream.
+            </summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="T:NGettext.Loaders.MoFileParser">
+            <summary>
+            MO file format parser.
+            See http://www.gnu.org/software/gettext/manual/html_node/MO-Files.html
+            </summary>
+        </member>
+        <member name="F:NGettext.Loaders.MoFileParser.MO_FILE_MAGIC">
+            <summary>
+            MO file format magic number.
+            </summary>
+        </member>
+        <member name="P:NGettext.Loaders.MoFileParser.Encoding">
+            <summary>
+            Current encoding for decoding all strings in given MO file.
+            </summary>
+            <remarks>
+            Default value is UTF-8 as it is compatible with required by specifications us-ascii.
+            This value could be changed when DetectEncoding property is set to True and the MO file
+            contains a valid charset name in the Content-Type header.
+            </remarks>
+        </member>
+        <member name="P:NGettext.Loaders.MoFileParser.DetectEncoding">
+            <summary>
+            Gets or sets a value that indicates whenever the parser can detect file encoding using the Content-Type MIME header.
+            </summary>
+        </member>
+        <member name="P:NGettext.Loaders.MoFileParser.IsBigEndian">
+            <summary>
+            Gets a value that indicates whenever loaded file was in the big-endian format.
+            </summary>
+        </member>
+        <member name="P:NGettext.Loaders.MoFileParser.FormatRevision">
+            <summary>
+            Gets parsed file's format revision.
+            </summary>
+        </member>
+        <member name="P:NGettext.Loaders.MoFileParser.Headers">
+            <summary>
+            Gets parsed file's metadata.
+            </summary>
+        </member>
+        <member name="P:NGettext.Loaders.MoFileParser.Translations">
+            <summary>
+            Gets parsed file's translation strings.
+            </summary>
+        </member>
+        <member name="M:NGettext.Loaders.MoFileParser.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:NGettext.Loaders.MoFileParser"/> class.
+            </summary>
+        </member>
+        <member name="M:NGettext.Loaders.MoFileParser.Parse(System.IO.Stream)">
+            <summary>
+            Parses a GNU MO file from the given stream and loads all available data.
+            </summary>
+            <remarks>
+            http://www.gnu.org/software/gettext/manual/html_node/MO-Files.html
+            </remarks>
+            <param name="stream">Stream that contain binary data in the MO file format</param>
+        </member>
+        <member name="T:NGettext.Plural.IPluralRule">
+            <summary>
+            Represents a plural form rule whitch can generate a plural form index by given number.
+            </summary>
+        </member>
+        <member name="P:NGettext.Plural.IPluralRule.NumPlurals">
+            <summary>
+            Maximum number of plural forms supported.
+            </summary>
+        </member>
+        <member name="M:NGettext.Plural.IPluralRule.Evaluate(System.Int64)">
+            <summary>
+            Evaluates a number and returns a plural form index.
+            </summary>
+            <param name="number">Number whitch needs to be evaluated.</param>
+            <returns>Plural form index.</returns>
+        </member>
+        <member name="T:NGettext.Plural.PluralRule">
+            <summary>
+            Default plural rule implementation whitch uses a evaluation delegate instance to evaluate a plural form.
+            </summary>
+        </member>
+        <member name="F:NGettext.Plural.PluralRule.EvaluatorDelegate">
+            <summary>
+            Evaluation delegate instance.
+            </summary>
+        </member>
+        <member name="P:NGettext.Plural.PluralRule.NumPlurals">
+            <summary>
+            Maximum number of plural forms supported.
+            </summary>
+        </member>
+        <member name="M:NGettext.Plural.PluralRule.#ctor(System.Int32,NGettext.Plural.PluralRuleEvaluatorDelegate)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NGettext.Plural.PluralRule"/> class using specified maximum plural
+            forms value and an evaluation delegate.
+            </summary>
+            <param name="numPlurals"></param>
+            <param name="evaluatorDelegate"></param>
+        </member>
+        <member name="M:NGettext.Plural.PluralRule.Evaluate(System.Int64)">
+            <summary>
+            Evaluates a number and returns a plural form index.
+            </summary>
+            <param name="number">Number whitch needs to be evaluated.</param>
+            <returns>Plural form index.</returns>
+        </member>
+        <member name="T:NGettext.Plural.IPluralRuleGenerator">
+            <summary>
+            Plural rule generator.
+            </summary>
+        </member>
+        <member name="M:NGettext.Plural.IPluralRuleGenerator.CreateRule(System.Globalization.CultureInfo)">
+            <summary>
+            Creates a plural rule for given culture.
+            </summary>
+            <param name="cultureInfo"></param>
+            <returns></returns>
+        </member>
+        <member name="T:NGettext.Plural.PluralRuleEvaluatorDelegate">
+            <summary>
+            Represents a plural rule evaluation delegate used in the DefaultPluralRule.
+            </summary>
+            <param name="number">Number whitch needs to be evaluated.</param>
+            <returns>Plural form index.</returns>
+        </member>
+        <member name="T:NGettext.Plural.DefaultPluralRuleGenerator">
+            <summary>
+            Default plural rule generator.
+            </summary>
+        </member>
+        <member name="M:NGettext.Plural.DefaultPluralRuleGenerator.CreateRule(System.Globalization.CultureInfo)">
+            <summary>
+            Creates a plural rule for given culture.
+            </summary>
+            <remarks>
+            Default furmulas created using information from http://cldr.unicode.org/
+            </remarks>
+            <param name="cultureInfo"></param>
+            <returns></returns>
+        </member>
+        <member name="T:NGettext.BaseCatalog">
+            <summary>
+            Base catalog.
+            </summary>
+        </member>
+        <member name="F:NGettext.BaseCatalog.CONTEXT_GLUE">
+            <summary>
+            Context glue (&lt;EOT&gt; symbol)
+            </summary>
+        </member>
+        <member name="P:NGettext.BaseCatalog.CultureInfo">
+            <summary>
+            Current catalog locale.
+            </summary>
+        </member>
+        <member name="P:NGettext.BaseCatalog.Translations">
+            <summary>
+            Loaded raw translation strings.
+            (msgctxt&lt;EOT&gt;)msgid => msgstr[]
+            </summary>
+        </member>
+        <member name="P:NGettext.BaseCatalog.PluralRule">
+            <summary>
+            Gets or sets current plural form rule.
+            </summary>
+        </member>
+        <member name="M:NGettext.BaseCatalog.#ctor(System.Globalization.CultureInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NGettext.BaseCatalog"/> class that has no translations
+            using given culture info with default plural form rule for given culture.
+            </summary>
+            <param name="cultureInfo">Locale of this catalog.</param>
+        </member>
+        <member name="M:NGettext.BaseCatalog.#ctor(System.Globalization.CultureInfo,NGettext.Plural.IPluralRuleGenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NGettext.BaseCatalog"/> class that has no translations
+            using given culture info and given plural rule generator to generate rule for given culture.
+            </summary>
+            <param name="cultureInfo"></param>
+            <param name="pluralRuleGenerator"></param>
+        </member>
+        <member name="M:NGettext.BaseCatalog.#ctor(System.Globalization.CultureInfo,NGettext.Plural.IPluralRule)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NGettext.BaseCatalog"/> class that has no translations
+            using given culture info and given plural rule.
+            </summary>
+            <param name="cultureInfo"></param>
+            <param name="pluralRule"></param>
+        </member>
+        <member name="M:NGettext.BaseCatalog.GetString(System.String)">
+            <summary>
+            Returns <paramref name="text"/> translated into the selected language.
+            Similar to <c>gettext</c> function.
+            </summary>
+            <param name="text">Text to translate.</param>
+            <returns>Translated text.</returns>
+        </member>
+        <member name="M:NGettext.BaseCatalog.GetString(System.String,System.Object[])">
+            <summary>
+            Returns <paramref name="text"/> translated into the selected language.
+            Similar to <c>gettext</c> function.
+            </summary>
+            <param name="text">Text to translate.</param>
+            <param name="args">Optional arguments for <see cref="M:System.String.Format(System.String,System.Object[])"/> method.</param>
+            <returns>Translated text.</returns>
+        </member>
+        <member name="M:NGettext.BaseCatalog.GetPluralString(System.String,System.String,System.Int64)">
+            <summary>
+            Returns the plural form for <paramref name="n"/> of the translation of <paramref name="text"/>.
+            Similar to <c>ngettext</c> function.
+            </summary>
+            <param name="text">Singular form of message to translate.</param>
+            <param name="pluralText">Plural form of message to translate.</param>
+            <param name="n">Value that determines the plural form.</param>
+            <returns>Translated text.</returns>
+        </member>
+        <member name="M:NGettext.BaseCatalog.GetPluralString(System.String,System.String,System.Int64,System.Object[])">
+            <summary>
+            Returns the plural form for <paramref name="n"/> of the translation of <paramref name="text"/>.
+            Similar to <c>ngettext</c> function.
+            </summary>
+            <param name="text">Singular form of message to translate.</param>
+            <param name="pluralText">Plural form of message to translate.</param>
+            <param name="n">Value that determines the plural form.</param>
+            <param name="args">Optional arguments for <see cref="M:System.String.Format(System.String,System.Object[])"/> method.</param>
+            <returns>Translated text.</returns>
+        </member>
+        <member name="M:NGettext.BaseCatalog.GetParticularString(System.String,System.String)">
+            <summary>
+            Returns <paramref name="text"/> translated into the selected language using given <paramref name="context"/>.
+            Similar to <c>pgettext</c> function.
+            </summary>
+            <param name="context">Context.</param>
+            <param name="text">Text to translate.</param>
+            <returns>Translated text.</returns>
+        </member>
+        <member name="M:NGettext.BaseCatalog.GetParticularString(System.String,System.String,System.Object[])">
+            <summary>
+            Returns <paramref name="text"/> translated into the selected language using given <paramref name="context"/>.
+            Similar to <c>pgettext</c> function.
+            </summary>
+            <param name="context">Context.</param>
+            <param name="text">Text to translate.</param>
+            <param name="args">Optional arguments for <see cref="M:System.String.Format(System.String,System.Object[])"/> method.</param>
+            <returns>Translated text.</returns>
+        </member>
+        <member name="M:NGettext.BaseCatalog.GetParticularPluralString(System.String,System.String,System.String,System.Int64)">
+            <summary>
+            Returns the plural form for <paramref name="n"/> of the translation of <paramref name="text"/> using given <paramref name="context"/>.
+            Similar to <c>npgettext</c> function.
+            </summary>
+            <param name="context">Context.</param>
+            <param name="text">Singular form of message to translate.</param>
+            <param name="pluralText">Plural form of message to translate.</param>
+            <param name="n">Value that determines the plural form.</param>
+            <returns>Translated text.</returns>
+        </member>
+        <member name="M:NGettext.BaseCatalog.GetParticularPluralString(System.String,System.String,System.String,System.Int64,System.Object[])">
+            <summary>
+            Returns the plural form for <paramref name="n"/> of the translation of <paramref name="text"/> using given <paramref name="context"/>.
+            Similar to <c>npgettext</c> function.
+            </summary>
+            <param name="context">Context.</param>
+            <param name="text">Singular form of message to translate.</param>
+            <param name="pluralText">Plural form of message to translate.</param>
+            <param name="n">Value that determines the plural form.</param>
+            <param name="args">Optional arguments for <see cref="M:System.String.Format(System.String,System.Object[])"/> method.</param>
+            <returns>Translated text.</returns>
+        </member>
+        <member name="M:NGettext.BaseCatalog.GetStringDefault(System.String,System.String)">
+            <summary>
+            Returns translated string for given <paramref name="messageId"/> or <paramref name="defaultMessage"/> on fail.
+            </summary>
+            <param name="messageId">Message ID</param>
+            <param name="defaultMessage">Default message</param>
+            <returns>Translated string</returns>
+        </member>
+        <member name="M:NGettext.BaseCatalog.GetPluralStringDefault(System.String,System.String,System.String,System.Int64)">
+            <summary>
+            Returns translated plural string for given <paramref name="messageId"/> or 
+            <paramref name="defaultMessage"/> or <paramref name="defaultPluralMessage"/> on fail.
+            </summary>
+            <param name="messageId">Message ID</param>
+            <param name="defaultMessage">Default message singular form</param>
+            <param name="defaultPluralMessage">Default message plural form</param>
+            <param name="n">Value that determines the plural form</param>
+            <returns>Translated string</returns>
+        </member>
+        <member name="M:NGettext.BaseCatalog.GetTranslations(System.String)">
+            <summary>
+            Returns all translations for given <paramref name="messageId"/>.
+            </summary>
+            <param name="messageId"></param>
+            <returns>Returns all translations for given <paramref name="messageId"/> or null if not found.</returns>
+        </member>
+    </members>
+</doc>
