@@ -564,35 +564,36 @@ namespace NGettextUtils
                 catalog = "Default";
             }
 
+            string app = string.Format( "{0}\\bin\\{1}", GettextPath, "xgettext.exe" ).Replace("\\\\", "\\");
+            //args.Add("xgettext.exe");
+            args.Add( "--from-code=UTF-8" );
+            args.Add( "--language=C#" );
+            args.Add( "--add-location" );
+            //args.Add( "--force-po" );
+            args.Add( "--no-wrap" );
+            args.Add( "--omit-header" );
+            args.Add( "--keyword=_" );
+            if ( string.Compare( GettextVersion, "0.17" ) >= 0 )
+            {
+                args.Add( string.Format( "--package-name={0}", catalog ) );
+                args.Add( string.Format( "--package-version={0}", "1.0.0.0" ) );
+            }
+            if ( !string.IsNullOrEmpty( output ) && File.Exists( output ) )
+            {
+                args.Add( "--join-existing" );
+                args.Add( string.Format( "--output={0}", output ) );
+            }
+            else
+            {
+                args.Add( string.Format( "--output={0}.pot", catalog ) );
+                args.Add( string.Format( "--default-domain={0}", catalog ) );
+            }
+
+            string WorkingDirectory = string.Empty;
             foreach ( string cs in csfiles )
             {
-                string app = string.Format( "{0}\\bin\\{1}", GettextPath, "xgettext.exe" ).Replace("\\\\", "\\");
-                //args.Add("xgettext.exe");
-                args.Add( "--from-code=UTF-8" );
-                args.Add( "--language=C#" );
-                args.Add( "--add-location" );
-                //args.Add( "--force-po" );
-                args.Add( "--no-wrap" );
-                args.Add( "--omit-header" );
-                args.Add( "--keyword=_" );
-                if ( string.Compare( GettextVersion, "0.17" ) >= 0 )
-                {
-                    args.Add( string.Format( "--package-name={0}", catalog ) );
-                    args.Add( string.Format( "--package-version={0}", "1.0.0.0" ) );
-                }
-                if ( !string.IsNullOrEmpty( output ) && File.Exists( output ) )
-                {
-                    args.Add( "--join-existing" );
-                    args.Add( string.Format( "--output={0}", output ) );
-                }
-                else
-                {
-                    args.Add( string.Format( "--output={0}.pot", catalog ) );
-                    args.Add( string.Format( "--default-domain={0}", catalog ) );
-                }
                 args.Add( cs );
 
-                string WorkingDirectory = string.Empty;
                 if ( string.IsNullOrEmpty( output ) )
                 {
                     WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
@@ -604,8 +605,8 @@ namespace NGettextUtils
                         WorkingDirectory = Path.GetDirectoryName( Path.GetFullPath( output ) );
                     }
                 }
-                ShellCall( app, args.ToArray(), WorkingDirectory );
             }
+            ShellCall( app, args.ToArray(), WorkingDirectory );
             return null;
         }
 
@@ -848,7 +849,7 @@ namespace NGettextUtils
             //    startInfo.StandardOutputEncoding = Encoding.UTF8;
             //    startInfo.StandardErrorEncoding = Encoding.UTF8;
             //}
-            Log( $"{startInfo.FileName} {startInfo.Arguments}\n" );
+            Log( $"\n{startInfo.FileName} {startInfo.Arguments}\n" );
 
             Process gettext = Process.Start( startInfo );
 
@@ -880,7 +881,7 @@ namespace NGettextUtils
                 exitcode = gettext.ExitCode;
                 gettext.Close();
             }
-            Log( "--------------------------------------------------------------\n\n" );
+            Log( "\n\n--------------------------------------------------------------\n\n" );
             return exitcode;
         }
 
