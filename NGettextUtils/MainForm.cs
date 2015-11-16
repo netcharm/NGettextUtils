@@ -268,6 +268,8 @@ namespace NGettextUtils
             //I18N i10n = new I18N( "NGetTextUtils", this, this.toolTip );
             I18N i10n = new I18N( Path.GetFileNameWithoutExtension( Application.ExecutablePath ), this, this.toolTip );
             //I18N i10n = new I18N( Path.GetFileNameWithoutExtension( Application.ExecutablePath ), this, this.toolTip, new object[] { this.dlgOpen } );
+
+            InitUI();
         }
 
         private void file_DragDrop( object sender, DragEventArgs e )
