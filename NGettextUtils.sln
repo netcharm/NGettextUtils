@@ -16,6 +16,7 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		Description = README.md
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{217F0607-A8EF-4DB7-93DB-2AD0F4F7386F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
