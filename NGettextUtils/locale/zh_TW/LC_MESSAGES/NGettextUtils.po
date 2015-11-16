@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GetTextUtils\n"
-"Report-Msgid-Bugs-To: netcharm<netcharm@163.com>\n"
-"POT-Creation-Date: 2015-11-13 23:59+0800\n"
-"PO-Revision-Date: 2015-11-14 00:42+0800\n"
+"Report-Msgid-Bugs-To: netcharm <netcharm@163.com>\n"
+"POT-Creation-Date: 2015-11-16 23:33+0800\n"
+"PO-Revision-Date: 2015-11-16 23:35+0800\n"
 "Last-Translator: netcharm <netcharm@163.com>\n"
 "Language-Team: netcharm <netcharm@163.com>\n"
 "MIME-Version: 1.0\n"
@@ -28,19 +28,29 @@ msgstr "就緒"
 msgid "State Info"
 msgstr "狀態信息"
 
-#: MainForm.Designer.cs:110
+#: MainForm.Designer.cs:95
+#: optionsForm.Designer.cs:249
+msgid "Options"
+msgstr "設定"
+
+#: MainForm.Designer.cs:96
+#| msgid "Options"
+msgid "Setting Options"
+msgstr "設定参数"
+
+#: MainForm.Designer.cs:121
 msgid "Translating PO"
 msgstr "打開PO翻譯"
 
-#: MainForm.Designer.cs:111
+#: MainForm.Designer.cs:122
 msgid "Open .PO Editor to translating it to locale"
 msgstr "使用.PO關聯的編輯器打開指定語言的本地化檔案以便翻譯"
 
-#: MainForm.Designer.cs:121
+#: MainForm.Designer.cs:132
 msgid "Patch File"
 msgstr "檔案打補丁"
 
-#: MainForm.Designer.cs:122
+#: MainForm.Designer.cs:133
 msgid ""
 "Add Code/FileRef to project\\n"
 "(not recommended for senior)"
@@ -48,89 +58,85 @@ msgstr ""
 "添加所需的代碼和參考庫檔案到項目\\n"
 "(熟練人員不推薦)"
 
-#: MainForm.Designer.cs:134
+#: MainForm.Designer.cs:145
 msgid "Load Solution"
 msgstr "載入解決方案"
 
-#: MainForm.Designer.cs:135
+#: MainForm.Designer.cs:146
 msgid "Load Solution file"
 msgstr "載入解決方案檔案"
 
-#: MainForm.Designer.cs:147
+#: MainForm.Designer.cs:158
 msgid "Create PO"
 msgstr "生成PO檔案"
 
-#: MainForm.Designer.cs:148
+#: MainForm.Designer.cs:159
 msgid "Create locale .PO file for every project"
 msgstr "為解決方案中的每個項目生成指定語言的本地化.PO檔案"
 
-#: MainForm.Designer.cs:160
+#: MainForm.Designer.cs:171
 msgid "Create MO"
 msgstr "生成MO檔案"
 
-#: MainForm.Designer.cs:161
-msgid "Create locale ResourceDLL file"
-msgstr "為解決方案中的每個項目生成指定語言的本地化資源DLL檔案"
+#: MainForm.Designer.cs:172
+#| msgid "Create locale ResourceDLL file"
+msgid "Create locale i18n .mo file"
+msgstr "為解決方案中的每個項目生成指定語言的本地化資源 I18N .po 檔案"
 
-#: MainForm.Designer.cs:173
+#: MainForm.Designer.cs:184
 msgid "Create POT"
 msgstr "生成POT檔案"
 
-#: MainForm.Designer.cs:174
+#: MainForm.Designer.cs:185
 msgid "Create .POT file for every project"
 msgstr "為解決方案中的每個項目生成指定語言的.POT模板檔案"
 
-#: MainForm.Designer.cs:216
+#: MainForm.Designer.cs:227
 msgid "Target Locale"
 msgstr "目標語言"
 
-#: MainForm.Designer.cs:227
+#: MainForm.Designer.cs:238
 msgid "Dropdown to select locale from all system supported"
 msgstr "下拉從系統支持的全部語言中選擇目標語言"
 
-#: MainForm.Designer.cs:235
+#: MainForm.Designer.cs:246
 msgid "CHT"
 msgstr "繁體中文"
 
-#: MainForm.Designer.cs:236
-#: MainForm.Designer.cs:249
+#: MainForm.Designer.cs:247
+#: MainForm.Designer.cs:260
 msgid "Most usage locale"
 msgstr "常用語言"
 
-#: MainForm.Designer.cs:248
+#: MainForm.Designer.cs:259
 msgid "CHS"
 msgstr "簡體中文"
 
-#: MainForm.Designer.cs:259
+#: MainForm.Designer.cs:270
 msgid "Solution File:"
 msgstr "解決方案檔案:"
 
-#: MainForm.Designer.cs:268
+#: MainForm.Designer.cs:279
 msgid "Logger:"
 msgstr "輸出信息顯示:"
 
-#: MainForm.Designer.cs:277
+#: MainForm.Designer.cs:288
 msgid "..."
 msgstr ""
 
-#: MainForm.Designer.cs:278
+#: MainForm.Designer.cs:289
 msgid "Browsing Directory to select Solution file."
 msgstr "瀏覽目錄以選擇解決方案檔案"
 
-#: MainForm.Designer.cs:295
+#: MainForm.Designer.cs:307
 msgid "Solution File|*.sln|All Files|*.*"
 msgstr "解決方案檔案|*.sln|所有檔案|*.*"
 
-#: MainForm.Designer.cs:297
+#: MainForm.Designer.cs:309
 msgid "Open Solution File"
 msgstr "打開解決方案檔案"
 
-#: MainForm.Designer.cs:306
-#: optionsForm.Designer.cs:249
-msgid "Options"
-msgstr "設定"
-
-#: MainForm.Designer.cs:326
+#: MainForm.Designer.cs:328
 msgid "NGetText Utility"
 msgstr "NGetText for Microsoft.Net C# 輔助小工具"
 
@@ -159,7 +165,6 @@ msgid "Relative Path"
 msgstr "使用相對路徑"
 
 #: optionsForm.Designer.cs:189
-#| msgid "Translating PO"
 msgid "Translator:"
 msgstr "翻譯人員"
 
@@ -171,7 +176,7 @@ msgstr "翻譯小組:"
 msgid "Solution must be loaded first!"
 msgstr "必須先載入解決方案檔案!"
 
-#: MainForm.cs:404
+#: MainForm.cs:406
 msgid "Loaded"
 msgstr "已載入"
 
