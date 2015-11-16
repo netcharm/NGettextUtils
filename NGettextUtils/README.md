@@ -1,4 +1,4 @@
-# NGettext C# Helper Utility
+ï»¿# NGettext C# Helper Utility
 ## English
 This is a NGettext helper tool. It a easy to use for automatic collection form ui text (winform/wpf), 
 and click-to-generating the i18n .pot/.po/.mo file with special language locale.
@@ -16,11 +16,27 @@ Features
 2. Extract string from XAML(WPF)/Designer(WinForm), code source, and convert it to pot
 3. Create locale .po file from .pot with msgmerge tool
 4. Generate Locale Resource Dll for my mod-version Gettext.WPF.Dll/Gettext.WinForm.dll using
-5. With modified Gettext.WPF.Dll/Gettext.WinForm.dll, can translating the ui control for auto-translating
+5. With NGettext.WPF.Dll/NGettext.WinForm.dll, can translating the ui control for auto-translating
 
 Usage
 ============
-1. Now can not support tooltip auto translating. You must usage it like following code snippet
+1. Normally example code
+
+        public MainForm()
+        {
+            InitializeComponent();
+            I18N i10n = new I18N( null, this);
+        }
+
+   or
+
+        public MainForm()
+        {
+            InitializeComponent();
+			I18N i10n = new I18N( "Your Catalog Name", this);
+        }
+
+2. Now can not totally support tooltip auto translating. You may usage it like following code snippet when not
 
         private void toolTip_Popup( object sender, PopupEventArgs e )
         {
@@ -29,17 +45,17 @@ Usage
         }
 
 
-2. Now can not support dialog auto translating. You must usage it like following code snippet
+3. Now can not support dialog auto translating. You must usage it like following code snippet
 
         dlgOpen.Filter = I18N._( dlgOpen.Filter );
         dlgOpen.Title = I18N._( dlgOpen.Title );
 
-3. Can using code snippet like following to init all
+4. Can using code snippet like following to init all
 
         public MainForm()
         {
             InitializeComponent();
-            I18N i10n = new I18N( "GetTextUtils", this, this.toolTip, new object[] { this.dlgOpen } );
+            I18N i10n = new I18N( "NGetTextUtils", this, this.toolTip, new object[] { this.dlgOpen } );
         }
 
 Source
@@ -52,27 +68,45 @@ binary
 1. https://bitbucket.org/netcharm/ngettextutils/download
 
 
-## ÖĞÎÄ
-¹¦ÄÜ:
+## ä¸­æ–‡
+åŠŸèƒ½:
 =====
-1. Ö§³ÖÍÏ·ÅºÍÃüÁîĞĞ´«µİVC#µÄ½â¾ö·½°¸ÎÄ¼ş(.sln)µ½³ÌĞò, ÒÔ±ãIDE´«²Î.
-2. ×ÔĞĞ½âÎöÔØÈëµÄ½â¾ö·½°¸ÎÄ¼ş, »ñÈ¡°üº¬µÄÏîÄ¿ÒÔ¼°ĞèÒª³éÈ¡¶àÓï»¯µÄUIÉè¼ÆÎÄ¼ş¼°´úÂëÎÄ¼ş, ¶ÔÓÚWPFÓ¦ÓÃ, ¾ÍÊÇ.xamlÎÄ¼şÒÔ¼°ÆäËû.csÎÄ¼ş, ¶ÔÓÚWinFormÎÄ¼ş, ¾ÍÊÇ.Designer.csÎÄ¼şÒÔ¼°ÆäËû.csÎÄ¼ş
-3. Ê¹ÓÃxgettext³éÈ¡ÆäËû.csÎÄ¼şÖĞµÄĞè¶àÓï»¯µÄ×Ö·û´®, UIÎÄ¼ş(·ÖÀàÈçÉÏËùÊö)ÖĞµÄÓÉ³ÌĞò×ÔĞĞÊµÏÖ. Éú³É.potÎÄ¼ş
-4. ÀûÓÃ´Ë.potÎÄ¼ş, °´ÕÕËùÑ¡ÔñµÄÄ¿±êÓïÑÔ, Éú³É.poÎÄ¼ş, Èç¹ûÃ»ÓĞ, Ö±½Ó¸´ÖÆ, Èç¹ûÒÑ´æÔÚ, Ê¹ÓÃmsgmergeºÏ²¢´¦Àí.
-5. ³ÌĞò×ª»»·­ÒëºóµÄÓïÑÔ.poÎª¹Ì¶¨¸ñÊ½µÄ.cs´úÂë, È»ºóÊ¹ÓÃ.net 3.5µÄcsc.exe±àÒë³öËùÑ¡ÓïÑÔµÄ×ÊÔ´ÎÄ¼ş.dll, ²¢×Ô¶¯¸´ÖÆ¶àÓï»¯Ä¿Â¼½á¹¹µ½bin\DebugºÍbin\ReleaseÄ¿Â¼ÏÂ(Ä¬ÈÏ×Ô¶¯¸²¸Ç¾ÉµÄ).
-6. ¿ÉÒÔÉµ¹Ï·½Ê½¸øÓÃ»§³ÌĞòÏîÄ¿ÎÄ¼şÒÔ¼°´úÂëÎÄ¼ş´ò²¹¶¡Ìí¼Ó¶Ô±¾ÈËĞŞ¸Ä±àÒëµÄGnuGettext¶àÓï»¯Dll(×¨ÒµÈËÊ¿²»ÍÆ¼ö, ÒòÎªÓĞ¿ÉÄÜ²úÉú·Ï´úÂë)
-7. ±¾ÈËĞŞ¸Ä±àÒëµÄGnuGettext¶àÓï»¯DllÏÖÒÑÖ§³Ö×Ô¶¯±éÀú·­ÒëUIµÄÎÄ×Ö(Î´¾­ÏêÏ¸²âÊÔ), Ö§³ÖWPFºÍWinForm.
-8. Ê¹ÓÃI18N._("your string")»òI18N.T("your string"), I18N.GetText("your string"), I18N.GetString("your string")ËÄÖÖ·½Ê½ÔÚ´úÂëÖĞÊä³ö¶àÓï»¯×Ö·û´®.
-9. ¿ÉÒÔ×ÔĞĞ±à¼­.configÎÄ¼şÉè¶¨CSC.EXEÂ·¾¶ÒÔÑ¡Ôñ²»Í¬°æ±¾
+1. æ”¯æŒæ‹–æ”¾å’Œå‘½ä»¤è¡Œä¼ é€’VC#çš„è§£å†³æ–¹æ¡ˆæ–‡ä»¶(.sln)åˆ°ç¨‹åº, ä»¥ä¾¿IDEä¼ å‚.
+2. è‡ªè¡Œè§£æè½½å…¥çš„è§£å†³æ–¹æ¡ˆæ–‡ä»¶, è·å–åŒ…å«çš„é¡¹ç›®ä»¥åŠéœ€è¦æŠ½å–å¤šè¯­åŒ–çš„UIè®¾è®¡æ–‡ä»¶åŠä»£ç æ–‡ä»¶, å¯¹äºWPFåº”ç”¨, å°±æ˜¯.xamlæ–‡ä»¶ä»¥åŠå…¶ä»–.csæ–‡ä»¶, å¯¹äºWinFormæ–‡ä»¶, å°±æ˜¯.Designer.csæ–‡ä»¶ä»¥åŠå…¶ä»–.csæ–‡ä»¶
+3. ä½¿ç”¨xgettextæŠ½å–å…¶ä»–.csæ–‡ä»¶ä¸­çš„éœ€å¤šè¯­åŒ–çš„å­—ç¬¦ä¸², UIæ–‡ä»¶(åˆ†ç±»å¦‚ä¸Šæ‰€è¿°)ä¸­çš„ç”±ç¨‹åºè‡ªè¡Œå®ç°. ç”Ÿæˆ.potæ–‡ä»¶
+4. åˆ©ç”¨æ­¤.potæ–‡ä»¶, æŒ‰ç…§æ‰€é€‰æ‹©çš„ç›®æ ‡è¯­è¨€, ç”Ÿæˆ.poæ–‡ä»¶, å¦‚æœæ²¡æœ‰, ç›´æ¥å¤åˆ¶, å¦‚æœå·²å­˜åœ¨, ä½¿ç”¨msgmergeåˆå¹¶å¤„ç†.
+5. ç¨‹åºè½¬æ¢ç¿»è¯‘åçš„è¯­è¨€.poä¸ºå›ºå®šæ ¼å¼çš„.csä»£ç , ç„¶åä½¿ç”¨.net 3.5çš„csc.exeç¼–è¯‘å‡ºæ‰€é€‰è¯­è¨€çš„èµ„æºæ–‡ä»¶.dll, å¹¶è‡ªåŠ¨å¤åˆ¶å¤šè¯­åŒ–ç›®å½•ç»“æ„åˆ°bin\Debugå’Œbin\Releaseç›®å½•ä¸‹(é»˜è®¤è‡ªåŠ¨è¦†ç›–æ—§çš„).
+6. å¯ä»¥å‚»ç“œæ–¹å¼ç»™ç”¨æˆ·ç¨‹åºé¡¹ç›®æ–‡ä»¶ä»¥åŠä»£ç æ–‡ä»¶æ‰“è¡¥ä¸æ·»åŠ å¯¹æœ¬äººä¿®æ”¹ç¼–è¯‘çš„GnuGettextå¤šè¯­åŒ–Dll(ä¸“ä¸šäººå£«ä¸æ¨è, å› ä¸ºæœ‰å¯èƒ½äº§ç”ŸåºŸä»£ç )
+7. æœ¬äººç¼–è¯‘çš„NGettextè¾…åŠ©å¤šè¯­åŒ–Dllç°å·²æ”¯æŒè‡ªåŠ¨éå†ç¿»è¯‘UIçš„æ–‡å­—(æœªç»è¯¦ç»†æµ‹è¯•), æ”¯æŒWPFå’ŒWinForm.
+8. ä½¿ç”¨I18N._("your string")æˆ–I18N.T("your string"), I18N.GetText("your string"), I18N.GetString("your string")å››ç§æ–¹å¼åœ¨ä»£ç ä¸­è¾“å‡ºå¤šè¯­åŒ–å­—ç¬¦ä¸².
+9. å¯ä»¥è‡ªè¡Œç¼–è¾‘.configæ–‡ä»¶è®¾å®šCSC.EXEè·¯å¾„ä»¥é€‰æ‹©ä¸åŒç‰ˆæœ¬
 
-±¸×¢:
+å¤‡æ³¨:
 =====
-1: ¿ª·¢»·¾³, VC# 2010 Express, ÔËĞĞĞèÇó .net °æ±¾ 3.5.
-2: Ìá¹©È«²¿Ô´´úÂëÏÂÔØ, ÓÉÓÚ±¾ÈË·Ç×¨Òµ³ÌĞòÔ±, ËùÒÔ´úÂëÖ»ÄÜÓÃ"¿ÉÒÔÓÃ"À´ĞÎÈİ, µØÖ·ÈçÏÂ
-      hg clone https://bitbucket.org/netcharm/gettextutility.net
-     ¶ş½øÖÆ´ò°üÎÄ¼ş¿ÉÒÔÔÚÏÂÁĞµØÖ·ÏÂÔØ(ÒÑ°üº¬ËùĞèµÄgettextÎÄ¼ş)
-         https://bitbucket.org/netcharm/gettextutility.net/downloads
-3. ÔİÊ±ÎŞ·¨Ö§³ÖToolTipµÄ×Ô¶¯·­Òë, ĞèÒªÊ¹ÓÃÀàËÆÏÂÁĞµÄ´úÂëÆ¬¶Î¶¯Ì¬·­Òë
+1. å¼€å‘ç¯å¢ƒ, VS 2015 Express for Desktop, è¿è¡Œéœ€æ±‚ .net ç‰ˆæœ¬ 3.5 client profile.
+2. æä¾›å…¨éƒ¨æºä»£ç ä¸‹è½½, ç”±äºæœ¬äººéä¸“ä¸šç¨‹åºå‘˜, æ‰€ä»¥ä»£ç åªèƒ½ç”¨"å¯ä»¥ç”¨"æ¥å½¢å®¹, åœ°å€å¦‚ä¸‹
+	1. https://github.com/netcharm/ngettextutils
+	2. https://bitbucket.org/netcharm/ngettextutils
+3. äºŒè¿›åˆ¶æ‰“åŒ…æ–‡ä»¶å¯ä»¥åœ¨ä¸‹åˆ—åœ°å€ä¸‹è½½(å·²åŒ…å«æ‰€éœ€çš„gettextæ–‡ä»¶)
+    1. https://bitbucket.org/netcharm/ngettextutils/download
+4. ä¸€èˆ¬ç”¨æ³•èŒƒä¾‹ä»£ç 
+
+        public MainForm()
+        {
+            InitializeComponent();
+            I18N i10n = new I18N( null, this);
+        }
+
+   æˆ–è€…
+
+        public MainForm()
+        {
+            InitializeComponent();
+			I18N i10n = new I18N( "Your Catalog Name", this);
+        }
+
+
+5. æš‚æ—¶æ— æ³•å®Œæ•´çš„æ”¯æŒToolTipçš„è‡ªåŠ¨ç¿»è¯‘, å‡ºç°æ— æ³•ç¿»è¯‘çš„çŠ¶å†µæ—¶éœ€è¦ä½¿ç”¨ç±»ä¼¼ä¸‹åˆ—çš„ä»£ç ç‰‡æ®µåŠ¨æ€ç¿»è¯‘
 
         private void toolTip_Popup( object sender, PopupEventArgs e )
         {
@@ -80,25 +114,25 @@ binary
             toolTip.SetToolTip( e.AssociatedControl, I18N._( toolTip.GetToolTip( e.AssociatedControl ) ).Replace( "\\n", "\n" ) );
         }
 
-4. ÔİÊ±ÎŞ·¨Ö§³Ö¶Ô»°¿òµÄ×Ô¶¯·­Òë, ĞèÒªÊ¹ÓÃÀàËÆÏÂÁĞµÄ´úÂëÆ¬¶Î¶¯Ì¬·­Òë
+6. æš‚æ—¶æ— æ³•æ”¯æŒå¯¹è¯æ¡†çš„è‡ªåŠ¨ç¿»è¯‘, éœ€è¦ä½¿ç”¨ç±»ä¼¼ä¸‹åˆ—çš„ä»£ç ç‰‡æ®µåŠ¨æ€ç¿»è¯‘
 
             dlgOpen.Filter = I18N._( dlgOpen.Filter );
             dlgOpen.Title = I18N._( dlgOpen.Title );
 
-5. »òÕßÊ¹ÓÃÀàËÆÈçÏÂ´úÂëÆ¬¶ÎµÄÄ£Ê½³õÊ¼»¯
+7. æˆ–è€…ä½¿ç”¨ç±»ä¼¼å¦‚ä¸‹ä»£ç ç‰‡æ®µçš„æ¨¡å¼åˆå§‹åŒ–
 
         public MainForm()
         {
             InitializeComponent();
-            I18N i10n = new I18N( "GetTextUtils", this, this.toolTip, new object[] { this.dlgOpen } );
+            I18N i10n = new I18N( "NGetTextUtils", this, this.toolTip, new object[] { this.dlgOpen } );
         }
 
-Ô´´úÂë²Ö¿â
+æºä»£ç ä»“åº“
 ============
 1. https://github.com/netcharm/ngettextutils
 2. https://bitbucket.org/netcharm/ngettextutils
 
-¶ş½øÖÆÏÂÔØ
+äºŒè¿›åˆ¶ä¸‹è½½
 ============
 1. https://bitbucket.org/netcharm/ngettextutils/download
 
