@@ -335,7 +335,8 @@ namespace NGettext.WinForm
                     ToolStrip tools = myObject as ToolStrip;
                     foreach (ToolStripItem Item in tools.Items)
                     {
-                        Item.Text = _(Item.Text);
+                        Item.Text = _( Item.Text );
+                        Item.ToolTipText = _( Item.ToolTipText );
                         string itemType = Item.GetType().ToString();
                         if (
                             (itemType.IndexOf("Forms.ToolStripMenuItem", StringComparison.InvariantCultureIgnoreCase) >= 0) ||
