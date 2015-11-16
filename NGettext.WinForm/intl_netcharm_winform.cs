@@ -103,18 +103,15 @@ namespace NGettext.WinForm
             else
                 return t;
         }
+
         /// <summary>
         /// Looks up a localized string.
         /// </summary>
         /// <param name="t">The untranslated string.</param>
         /// <returns>Translated string according to the resource culture.</returns>
-        public static string GetText(string t)
+        public static string GetText( string t )
         {
-            ///if(_catalog != null)
-            if (_catalog is Catalog)
-                return _catalog.GetString(t);
-            else
-                return t;
+            return GetString( t );
         }
 
         /// <summary>
@@ -122,13 +119,9 @@ namespace NGettext.WinForm
         /// </summary>
         /// <param name="t">The untranslated string.</param>
         /// <returns>Translated string according to the resource culture.</returns>
-        public static string T(string t)
+        public static string T( string t )
         {
-            ///if(_catalog != null)
-            if (_catalog is Catalog)
-                return _catalog.GetString(t);
-            else
-                return t;
+            return GetString( t );
         }
 
         /// <summary>
@@ -136,13 +129,95 @@ namespace NGettext.WinForm
         /// </summary>
         /// <param name="t">The untranslated string.</param>
         /// <returns>Translated string according to the resource culture.</returns>
-        public static string _(string t)
+        public static string _( string t )
         {
-            ///if(_catalog != null)
-            if (_catalog is Catalog)
-                return _catalog.GetString(t);
-            else
-                return t;
+            return GetString( t );
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public static string _( string text, params object[] args )
+        {
+            return _catalog.GetString( text, args );
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="pluralText"></param>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        public static string _n( string text, string pluralText, long n )
+        {
+            return _catalog.GetPluralString( text, pluralText, n );
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="pluralText"></param>
+        /// <param name="n"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public static string _n( string text, string pluralText, long n, params object[] args )
+        {
+            return _catalog.GetPluralString( text, pluralText, n, args );
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public static string _p( string context, string text )
+        {
+            return _catalog.GetParticularString( context, text );
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="text"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public static string _p( string context, string text, params object[] args )
+        {
+            return _catalog.GetParticularString( context, text, args );
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="text"></param>
+        /// <param name="pluralText"></param>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        public static string _pn( string context, string text, string pluralText, long n )
+        {
+            return _catalog.GetParticularPluralString( context, text, pluralText, n );
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="text"></param>
+        /// <param name="pluralText"></param>
+        /// <param name="n"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public static string _pn( string context, string text, string pluralText, long n, params object[] args )
+        {
+            return _catalog.GetParticularPluralString( context, text, pluralText, n, args );
         }
 
         /// <summary>
