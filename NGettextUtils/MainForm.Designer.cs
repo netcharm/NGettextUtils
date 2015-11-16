@@ -33,6 +33,7 @@
             this.status = new System.Windows.Forms.StatusStrip();
             this.StatusLabelState = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgress = new System.Windows.Forms.ToolStripProgressBar();
+            this.btnOptions = new System.Windows.Forms.ToolStripSplitButton();
             this.pnlAction = new System.Windows.Forms.Panel();
             this.btnOpenPO = new System.Windows.Forms.Button();
             this.btnPatchFile = new System.Windows.Forms.Button();
@@ -51,7 +52,6 @@
             this.btnBrowseSln = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dlgOpen = new System.Windows.Forms.OpenFileDialog();
-            this.btnOptions = new System.Windows.Forms.ToolStripSplitButton();
             this.status.SuspendLayout();
             this.pnlAction.SuspendLayout();
             this.grpLocale.SuspendLayout();
@@ -65,6 +65,7 @@
             this.btnOptions});
             this.status.Location = new System.Drawing.Point(0, 427);
             this.status.Name = "status";
+            this.status.ShowItemToolTips = true;
             this.status.Size = new System.Drawing.Size(677, 22);
             this.status.SizingGrip = false;
             this.status.TabIndex = 2;
@@ -84,6 +85,17 @@
             // 
             this.toolStripProgress.Name = "toolStripProgress";
             this.toolStripProgress.Size = new System.Drawing.Size(100, 16);
+            // 
+            // btnOptions
+            // 
+            this.btnOptions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnOptions.Image")));
+            this.btnOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnOptions.Name = "btnOptions";
+            this.btnOptions.Size = new System.Drawing.Size(63, 20);
+            this.btnOptions.Text = "Options";
+            this.btnOptions.ToolTipText = "Setting Options";
+            this.btnOptions.ButtonClick += new System.EventHandler(this.btnOptions_ButtonClick);
             // 
             // pnlAction
             // 
@@ -158,7 +170,7 @@
             this.btnCreateLangDll.Size = new System.Drawing.Size(100, 23);
             this.btnCreateLangDll.TabIndex = 2;
             this.btnCreateLangDll.Text = "Create MO";
-            this.toolTip.SetToolTip(this.btnCreateLangDll, "Create locale ResourceDLL file");
+            this.toolTip.SetToolTip(this.btnCreateLangDll, "Create locale i18n .mo file");
             this.btnCreateLangDll.UseVisualStyleBackColor = true;
             this.btnCreateLangDll.Click += new System.EventHandler(this.btnCreateLangDll_Click);
             // 
@@ -284,6 +296,7 @@
             // 
             this.toolTip.ShowAlways = true;
             this.toolTip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.toolTip.ToolTipTitle = "NGettextUtils";
             this.toolTip.UseAnimation = false;
             this.toolTip.UseFading = false;
             this.toolTip.Popup += new System.Windows.Forms.PopupEventHandler(this.toolTip_Popup);
@@ -295,16 +308,6 @@
             this.dlgOpen.Filter = "Solution File|*.sln|All Files|*.*";
             this.dlgOpen.SupportMultiDottedExtensions = true;
             this.dlgOpen.Title = "Open Solution File";
-            // 
-            // btnOptions
-            // 
-            this.btnOptions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.btnOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnOptions.Image")));
-            this.btnOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnOptions.Name = "btnOptions";
-            this.btnOptions.Size = new System.Drawing.Size(63, 20);
-            this.btnOptions.Text = "Options";
-            this.btnOptions.ButtonClick += new System.EventHandler(this.btnOptions_ButtonClick);
             // 
             // MainForm
             // 
