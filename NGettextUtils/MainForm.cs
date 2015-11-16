@@ -23,7 +23,7 @@ namespace NGettextUtils
         private string poTranslator = "FULL NAME<EMAIL@ADDRESS>";
         private string poTeam = "LANGUAGE <LL@li.org>";
 
-        private string cscPath = string.Empty;
+        private string cscPath = "C:\\Windows\\Microsoft.NET\\Framework\\v3.5\\csc.exe"; // string.Empty;
 
         private string strSolutionNotLoaded = I18N._( "Solution must be loaded first!" );
 

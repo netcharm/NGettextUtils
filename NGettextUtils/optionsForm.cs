@@ -39,8 +39,8 @@ namespace NGettextUtils
             poTranslator = edPoTranslator.Text;
             poTeam = edPoTeam.Text;
 
-            if ( !string.IsNullOrEmpty( cscPath ) && 
-                 !string.IsNullOrEmpty( gnugettextPath ) && 
+            if ( !string.IsNullOrEmpty( gnugettextPath ) &&
+                 //!string.IsNullOrEmpty( cscPath ) &&
                  !string.IsNullOrEmpty( poeditPath ) )
             {
                 firstRun = false;
