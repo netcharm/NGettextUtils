@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace NGettextUtils
 {
-    public enum CSFileType { NONE, XAML, FORM, CODE };
+    public enum CSFileType { NONE, XAML, FORM, CODE, RESX };
     public enum ProjectGUIType { NONE, WPF, WinForm };
 
     #region stdout/stderror To log
@@ -108,6 +108,9 @@ namespace NGettextUtils
         private static string[] xaml_attr_tran  = new string[] {"Title", "content", "text", "header", "tooltip"};
         private static string[] xaml_inner_tran  = new string[] { "TextBlock" };
 
+        private static string[] resx_tags  = new string[] {"data" };
+        private static string[] resx_attr_tran  = new string[] {"value" };
+
         private static string[] form_attr_tran  = new string[] { "Title", "content", "text", "header", "SetToolTip", "ToolTipText", "Filter" };
         private static string[] form_inner_tran  = new string[] { "TextBlock" };
         #endregion
@@ -195,6 +198,193 @@ namespace NGettextUtils
             return langs.ToArray();
         }
 
+        public static string WritePOT( List<string>lines, string catalog, string output, bool append = true )
+        {
+            string AppPath = AppDomain.CurrentDomain.BaseDirectory;
+
+            if ( string.IsNullOrEmpty( catalog ) )
+            {
+                catalog = "Default";
+            }
+
+            DateTime nt = DateTime.Now;
+            TimeZone nz = TimeZone.CurrentTimeZone;
+            TimeSpan no = nz.GetUtcOffset( nt );
+
+            string symbol = "+";
+            if ( no.ToString().StartsWith( "-" ) )
+            {
+                symbol = "-";
+            }
+
+            string pot_date = string.Format( "{0:yyyy-MM-dd HH:mm}{3}{1:00}{2:00}", nt, no.Hours, no.Minutes, symbol );
+            string pot_translator = poTranslator;
+            string pot_team = poTeam;
+
+            List<string> headerLines = new List<string>();
+            foreach ( string s in po_header )
+            {
+                headerLines.Add( string.Format( s, catalog, pot_date, pot_translator, pot_team ) );
+            }
+
+            StringBuilder polines = new StringBuilder();
+            foreach ( string line in lines )
+            {
+                polines.AppendLine( line );
+            }
+            string fo = string.Empty;
+            if ( string.IsNullOrEmpty( output ) )
+            {
+                fo = string.Format( "{0}\\{1}.pot", AppPath, catalog );
+            }
+            else
+            {
+                fo = string.Format( "{0}", output );
+            }
+            if(File.Exists(fo) && append )
+            {
+                StreamWriter pofile = new StreamWriter( fo, true, new UTF8Encoding( false ) );
+                pofile.WriteLine( "" );
+                pofile.WriteLine( polines );
+                pofile.Close();
+            }
+            else
+            {
+                StreamWriter pofile = new StreamWriter( fo, false, new UTF8Encoding( false ) );
+                pofile.WriteLine( headerLines );
+                pofile.WriteLine( "" );
+                pofile.WriteLine( polines );
+                pofile.Close();
+            }
+            return fo;
+        }
+
+        public static string resx2po( string resx, string catalog = null )
+        {
+            if ( !string.IsNullOrEmpty( resx ) && File.Exists( resx ) )
+            {
+                if ( string.IsNullOrEmpty( catalog ) )
+                {
+                    catalog = Path.GetFileNameWithoutExtension( resx );
+                }
+                DateTime nt = DateTime.Now;
+                TimeZone nz = TimeZone.CurrentTimeZone;
+                TimeSpan no = nz.GetUtcOffset( nt );
+
+                string symbol = "+";
+                if ( no.ToString().StartsWith( "-" ) )
+                {
+                    symbol = "-";
+                }
+                string   pot_date = string.Format( "{0:yyyy-MM-dd HH:mm}{3}{1:00}{2:00}", nt, no.Hours, no.Minutes, symbol );
+
+                StringBuilder lines = new StringBuilder();
+                foreach ( string s in po_header )
+                {
+                    lines.AppendLine( string.Format( s, catalog, pot_date ) );
+                }
+
+                XDocument xmldoc = XDocument.Load( resx );
+
+                foreach ( XElement element in xmldoc.Descendants() )
+                {
+                    foreach ( XAttribute attr in element.Attributes() )
+                    {
+                        foreach ( string an in xaml_attr_tran )
+                        {
+                            if ( string.Equals( an, attr.Name.ToString(), StringComparison.InvariantCultureIgnoreCase ) )
+                            {
+                                if ( !string.IsNullOrEmpty( attr.Value ) )
+                                {
+                                    lines.AppendLine( string.Format( "\n#: {0}: node -> {1}", resx, attr.Name ) );
+                                    lines.AppendLine( string.Format( "msgid \"{0}\"", attr.Value ) );
+                                    lines.AppendLine( "msgstr \"\"" );
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+                string AppPath = Path.GetDirectoryName( resx );
+                StreamWriter pofile = new StreamWriter( string.Format( "{0}\\{1}.pot", AppPath, catalog ), false, new UTF8Encoding( true ) );
+                pofile.WriteLine( lines );
+                pofile.Close();
+            }
+            return null;
+        }
+
+        public static string resx2po( string resx, string catalog = null, string output = null, bool append = true )
+        {
+            List<string> resxfiles = new List<string>();
+            resxfiles.Add( resx );
+            return resx2po( resxfiles.ToArray(), catalog, output );
+        }
+
+        public static string resx2po( string[] resxfiles, string catalog, string output = null, bool append = true )
+        {
+            List<string> lines = new List<string>();
+
+            Dictionary<string, int> msgids = new Dictionary<string, int>();
+
+            foreach ( string resx in resxfiles )
+            {
+                if ( !string.IsNullOrEmpty( resx ) && File.Exists( resx ) )
+                {
+                    XDocument xmldoc = XDocument.Load( resx, LoadOptions.SetLineInfo );
+                    foreach ( XElement element in xmldoc.Descendants() )
+                    {
+                        if( !string.Equals( element.Name.LocalName,  "data", StringComparison.InvariantCultureIgnoreCase ) )
+                        {
+                            continue;
+                        }
+                        if ( !element.HasElements ) continue;
+
+                        string nodeName = string.Empty;
+                        foreach ( XAttribute attr in element.Attributes() )
+                        {
+                            if ( string.Equals( "Name", attr.Name.LocalName.ToString(), StringComparison.InvariantCultureIgnoreCase ) )
+                            {
+                                nodeName = attr.Value;
+                            }
+                        }
+                        if ( string.IsNullOrEmpty( nodeName ) )
+                        {
+                            nodeName = element.Name.LocalName;
+                        }
+
+                        foreach ( XElement child in element.Elements() )
+                        {
+                            if ( string.Equals( child.Name.LocalName, "value", StringComparison.InvariantCultureIgnoreCase ) )
+                            {
+                                int lineNumber = -1;
+                                if ( ( (IXmlLineInfo) child ).HasLineInfo() )
+                                {
+                                    lineNumber = ( (IXmlLineInfo) child ).LineNumber;
+                                }
+
+                                if ( msgids.ContainsKey( child.Value ) )
+                                {
+                                    int index = -1;
+                                    msgids.TryGetValue( child.Value, out index );
+                                    lines.Insert( index, string.Format( "#: {0}:{1} -> {2}.{3}", resx, lineNumber, nodeName, child.Name ) );
+                                    msgids[child.Value] = index + 1;
+                                }
+                                else
+                                {
+                                    lines.Add( "" );
+                                    lines.Add( string.Format( "#: {0}:{1} -> {2}.{3}", resx, lineNumber, nodeName, child.Name ) );
+                                    lines.Add( string.Format( "msgid \"{0}\"", child.Value ) );
+                                    lines.Add( "msgstr \"\"" );
+                                    msgids.Add( child.Value, lines.Count - 2 );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return WritePOT( lines, catalog, output );
+        }
+
         public static string xaml2po( string xaml, string catalog = null )
         {
             if ( !string.IsNullOrEmpty( xaml ) && File.Exists( xaml ) )
@@ -212,12 +402,15 @@ namespace NGettextUtils
                 {
                     symbol = "-";
                 }
+
                 string   pot_date = string.Format( "{0:yyyy-MM-dd HH:mm}{3}{1:00}{2:00}", nt, no.Hours, no.Minutes, symbol );
+                string pot_translator = poTranslator;
+                string pot_team = poTeam;
 
                 StringBuilder lines = new StringBuilder();
                 foreach ( string s in po_header )
                 {
-                    lines.AppendLine( string.Format( s, catalog, pot_date ) );
+                    lines.AppendLine( string.Format( s, catalog, pot_date, pot_translator, pot_team ) );
                 }
 
                 XDocument xmldoc = XDocument.Load( xaml );
@@ -264,41 +457,16 @@ namespace NGettextUtils
             return null;
         }
 
-        public static string xaml2po( string xaml, string catalog = null, string output =null )
+        public static string xaml2po( string xaml, string catalog = null, string output =null, bool append = true )
         {
             List<string> xamlfiles = new List<string>();
             xamlfiles.Add( xaml );
             return xaml2po( xamlfiles.ToArray(), catalog, output );
         }
 
-        public static string xaml2po( string[] xamlfiles, string catalog, string output = null )
+        public static string xaml2po( string[] xamlfiles, string catalog, string output = null, bool append = true )
         {
-            string AppPath = AppDomain.CurrentDomain.BaseDirectory;
-
-            if ( string.IsNullOrEmpty( catalog ) )
-            {
-                catalog = "Default";
-            }
-
-            DateTime nt = DateTime.Now;
-            TimeZone nz = TimeZone.CurrentTimeZone;
-            TimeSpan no = nz.GetUtcOffset( nt );
-
-            string symbol = "+";
-            if ( no.ToString().StartsWith( "-" ) )
-            {
-                symbol = "-";
-            }
-
-            string   pot_date = string.Format( "{0:yyyy-MM-dd HH:mm}{3}{1:00}{2:00}", nt, no.Hours, no.Minutes, symbol );
-            string pot_translator = poTranslator;
-            string pot_team = poTeam;
-
             List<string> lines = new List<string>();
-            foreach ( string s in po_header )
-            {
-                lines.Add( string.Format( s, catalog, pot_date, pot_translator, pot_team ) );
-            }
 
             Dictionary<string, int> msgids = new Dictionary<string, int>();
 
@@ -385,64 +553,19 @@ namespace NGettextUtils
                     }
                 }
             }
-
-            StringBuilder polines = new StringBuilder();
-            foreach ( string line in lines )
-            {
-                polines.AppendLine( line );
-            }
-            if ( string.IsNullOrEmpty( output ) )
-            {
-                string fo = string.Format( "{0}\\{1}.pot", AppPath, catalog );
-                StreamWriter pofile = new StreamWriter( fo, false, new UTF8Encoding( false ) );
-                pofile.WriteLine( polines );
-                pofile.Close();
-                return fo;
-            }
-            else
-            {
-                string fo = string.Format( "{0}", output );
-                StreamWriter pofile = new StreamWriter( fo, false, new UTF8Encoding( false ) );
-                pofile.WriteLine( polines );
-                pofile.Close();
-                return fo;
-            }
+            return WritePOT( lines, catalog, output, append );
         }
 
-        public static string form2po( string cs, string catalog = null, string output = null )
+        public static string form2po( string cs, string catalog = null, string output = null, bool overwrite = true )
         {
             List<string> csfiles = new List<string>();
             csfiles.Add( cs );
             return form2po( csfiles.ToArray(), catalog, output );
         }
 
-        public static string form2po( string[] csfiles, string catalog = null, string output = null )
+        public static string form2po( string[] csfiles, string catalog = null, string output = null, bool overwrite = true )
         {
-            string AppPath = AppDomain.CurrentDomain.BaseDirectory;
-
-            if ( string.IsNullOrEmpty( catalog ) )
-            {
-                catalog = "Default";
-            }
-
-            DateTime nt = DateTime.Now;
-            TimeZone nz = TimeZone.CurrentTimeZone;
-            TimeSpan no = nz.GetUtcOffset( nt );
-
-            string symbol = "+";
-            if ( no.ToString().StartsWith( "-" ) )
-            {
-                symbol = "-";
-            }
-            string pot_date = string.Format( "{0:yyyy-MM-dd HH:mm}{3}{1:00}{2:00}", nt, no.Hours, no.Minutes, symbol );
-            string pot_translator = poTranslator;
-            string pot_team = poTeam;
-
             List<string> lines = new List<string>();
-            foreach ( string s in po_header )
-            {
-                lines.Add( string.Format( s, catalog, pot_date, pot_translator, pot_team ) );
-            }
 
             Dictionary<string, int> msgids = new Dictionary<string, int>();
 
@@ -529,37 +652,17 @@ namespace NGettextUtils
                     csfile.Close();
                 }
             }
-            StringBuilder polines = new StringBuilder();
-            foreach ( string line in lines )
-            {
-                polines.AppendLine( line );
-            }
-            if ( string.IsNullOrEmpty( output ) )
-            {
-                string fo = string.Format( "{0}.pot", catalog );
-                StreamWriter pofile = new StreamWriter( fo, false, new UTF8Encoding( false ) );
-                pofile.WriteLine( polines );
-                pofile.Close();
-                return fo;
-            }
-            else
-            {
-                string fo = string.Format( "{0}", output );
-                StreamWriter pofile = new StreamWriter( fo, false, new UTF8Encoding( false ) );
-                pofile.WriteLine( polines );
-                pofile.Close();
-                return fo;
-            }
+            return WritePOT( lines, catalog, output, overwrite );
         }
 
-        public static string cs2po( string cs, string catalog = null, string output = null )
+        public static string cs2po( string cs, string catalog = null, string output = null, bool overwrite = true )
         {
             List<string> csfiles = new List<string>();
             csfiles.Add( cs );
             return cs2po( csfiles.ToArray(), catalog, output );
         }
 
-        public static string cs2po( string[] csfiles, string catalog = null, string output = null )
+        public static string cs2po( string[] csfiles, string catalog = null, string output = null, bool overwrite = true )
         {
             List<string> args = new List<string>();
             if ( string.IsNullOrEmpty( catalog ) )
@@ -985,6 +1088,12 @@ namespace NGettextUtils
             set { ProjectGUID = value; }
         }
 
+        private List<string> ResxFileList = new List<string>();
+        public string[] ResxFiles
+        {
+            get { return ResxFileList.ToArray(); }
+        }
+
         private List<string> XamlFileList = new List<string>();
         public string[] XamlFiles
         {
@@ -1014,6 +1123,7 @@ namespace NGettextUtils
 
             if ( !string.IsNullOrEmpty( csproj ) && File.Exists( csproj ) )
             {
+                ResxFileList.Clear();
                 XamlFileList.Clear();
                 FormFileList.Clear();
                 CodeFileList.Clear();
@@ -1120,7 +1230,7 @@ namespace NGettextUtils
                         else if ( string.Equals( "Code", child.InnerText, StringComparison.InvariantCultureIgnoreCase ) )
                         {
                             ftype = CSFileType.CODE;
-                        }
+                        }                       
                         break;
                     }
 
@@ -1137,12 +1247,31 @@ namespace NGettextUtils
                                 }
                                 else
                                 {
+                                    ftype = CSFileType.CODE;
                                     CodeFileList.Add( attr.Value );
                                 }
                                 break;
                             }
                         }
                     }
+                }
+
+                elements = xmldoc.GetElementsByTagName( "EmbeddedResource" );
+                foreach ( XmlElement element in elements )
+                {
+                    foreach ( XmlAttribute attr in element.Attributes )
+                    {
+                        if ( string.Equals( "Include", attr.Name, StringComparison.InvariantCultureIgnoreCase ) )
+                        {
+                            if ( !string.IsNullOrEmpty( attr.Value ) )
+                            {
+                                ftype = CSFileType.RESX;
+                                ResxFileList.Add( attr.Value );
+                                break;
+                            }
+                        }
+                    }
+
                 }
                 FileLoaded = true;
             }
@@ -1153,17 +1282,21 @@ namespace NGettextUtils
             if ( FileLoaded )
             {
                 Directory.SetCurrentDirectory( Folder );
+                if ( ResxFiles.Length > 0 )
+                {
+                    msgidCollector.resx2po( ResxFiles, Domain, string.Format( "{0}.pot", Domain ), false );
+                }
                 if ( XamlFiles.Length > 0 )
                 {
-                    msgidCollector.xaml2po( XamlFiles, Domain, string.Format( "{0}.pot", Domain ) );
+                    msgidCollector.xaml2po( XamlFiles, Domain, string.Format( "{0}.pot", Domain ), true );
                 }
                 if ( FormFiles.Length > 0 )
                 {
-                    msgidCollector.form2po( FormFiles, Domain, string.Format( "{0}.pot", Domain ) );
+                    msgidCollector.form2po( FormFiles, Domain, string.Format( "{0}.pot", Domain ), true );
                 }
                 if ( CodeFiles.Length > 0 )
                 {
-                    msgidCollector.cs2po( CodeFiles, Domain, string.Format( "{0}.pot", Domain ) );
+                    msgidCollector.cs2po( CodeFiles, Domain, string.Format( "{0}.pot", Domain ), true );
                 }
             }
         }
