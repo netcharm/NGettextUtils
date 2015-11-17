@@ -289,12 +289,15 @@ namespace NGettextUtils
             {
                 symbol = "-";
             }
+
             string   pot_date = string.Format( "{0:yyyy-MM-dd HH:mm}{3}{1:00}{2:00}", nt, no.Hours, no.Minutes, symbol );
+            string pot_translator = poTranslator;
+            string pot_team = poTeam;
 
             List<string> lines = new List<string>();
             foreach ( string s in po_header )
             {
-                lines.Add( string.Format( s, catalog, pot_date ) );
+                lines.Add( string.Format( s, catalog, pot_date, pot_translator, pot_team ) );
             }
 
             Dictionary<string, int> msgids = new Dictionary<string, int>();
