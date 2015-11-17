@@ -244,7 +244,6 @@ namespace NGettextUtils
             if(File.Exists(fo) && append )
             {
                 StreamWriter pofile = new StreamWriter( fo, true, new UTF8Encoding( false ) );
-                pofile.WriteLine( "" );
                 pofile.WriteLine( polines );
                 pofile.Close();
             }
@@ -382,7 +381,7 @@ namespace NGettextUtils
                     }
                 }
             }
-            return WritePOT( lines, catalog, output );
+            return WritePOT( lines, catalog, output, append );
         }
 
         public static string xaml2po( string xaml, string catalog = null )
@@ -556,14 +555,14 @@ namespace NGettextUtils
             return WritePOT( lines, catalog, output, append );
         }
 
-        public static string form2po( string cs, string catalog = null, string output = null, bool overwrite = true )
+        public static string form2po( string cs, string catalog = null, string output = null, bool append = true )
         {
             List<string> csfiles = new List<string>();
             csfiles.Add( cs );
             return form2po( csfiles.ToArray(), catalog, output );
         }
 
-        public static string form2po( string[] csfiles, string catalog = null, string output = null, bool overwrite = true )
+        public static string form2po( string[] csfiles, string catalog = null, string output = null, bool append = true )
         {
             List<string> lines = new List<string>();
 
@@ -652,17 +651,17 @@ namespace NGettextUtils
                     csfile.Close();
                 }
             }
-            return WritePOT( lines, catalog, output, overwrite );
+            return WritePOT( lines, catalog, output, append );
         }
 
-        public static string cs2po( string cs, string catalog = null, string output = null, bool overwrite = true )
+        public static string cs2po( string cs, string catalog = null, string output = null, bool append = true )
         {
             List<string> csfiles = new List<string>();
             csfiles.Add( cs );
             return cs2po( csfiles.ToArray(), catalog, output );
         }
 
-        public static string cs2po( string[] csfiles, string catalog = null, string output = null, bool overwrite = true )
+        public static string cs2po( string[] csfiles, string catalog = null, string output = null, bool append = true )
         {
             List<string> args = new List<string>();
             if ( string.IsNullOrEmpty( catalog ) )
@@ -725,6 +724,9 @@ namespace NGettextUtils
             }
 
             string app = string.Format( "{0}\\bin\\{1}", GettextPath, "msgmerge.exe" ).Replace( "\\\\", "\\" );
+            args.Add( "--quiet" );
+            args.Add( "--force-po" );
+            //args.Add( "--strict" ); 
             args.Add( "--update" );
             args.Add( "--backup=off" );
             args.Add( "--verbose" );
@@ -961,6 +963,10 @@ namespace NGettextUtils
 
             if ( !startInfo.UseShellExecute )
             {
+                if ( !gettext.WaitForExit( 5000 ) )
+                {
+                    gettext.Kill();
+                }
                 if ( startInfo.RedirectStandardOutput )
                 {
                     string stdout = gettext.StandardOutput.ReadToEnd();
@@ -974,15 +980,9 @@ namespace NGettextUtils
             }
             if ( wait )
             {
-                gettext.WaitForExit();
-
                 while ( true )
                 {
-                    if ( gettext.HasExited )
-                    {
-                        //if(File.Exists(po)) po="";
-                        break;
-                    }
+                    if ( gettext.HasExited ) break;
                 }
                 exitcode = gettext.ExitCode;
                 gettext.Close();
@@ -1157,10 +1157,6 @@ namespace NGettextUtils
                                 {
                                     ProjectGUI = ProjectGUIType.WPF;
                                 }
-                                //else if ( attr.Value.IndexOf( "System.Windows.Forms", StringComparison.InvariantCultureIgnoreCase ) >= 0 )
-                                //{
-                                //    ProjectGUI = ProjectGUIType.WinForm;
-                                //}
                             }
                         }
                         break;
@@ -1176,8 +1172,11 @@ namespace NGettextUtils
                         {
                             if ( !string.IsNullOrEmpty( attr.Value ) )
                             {
-                                XamlFileList.Add( attr.Value );
-                                break;
+                                if ( string.Equals( ".xaml", Path.GetExtension( attr.Value ), StringComparison.InvariantCultureIgnoreCase ) )
+                                {
+                                    XamlFileList.Add( attr.Value );
+                                    break;
+                                }
                             }
                         }
                     }
@@ -1193,8 +1192,11 @@ namespace NGettextUtils
                         {
                             if ( !string.IsNullOrEmpty( attr.Value ) )
                             {
-                                XamlFileList.Add( attr.Value );
-                                break;
+                                if ( string.Equals( ".resx", Path.GetExtension( attr.Value ), StringComparison.InvariantCultureIgnoreCase ) )
+                                {
+                                    XamlFileList.Add( attr.Value );
+                                    break;
+                                }
                             }
                         }
                     }
