@@ -212,7 +212,6 @@ namespace NGettextUtils
             return WritePOT( lines, catalog, output, append );
         }
 
-        //public static string WritePOT( List<string> lines, string catalog, string output, bool append = true )
         public static string WritePOT( StringBuilder lines, string catalog, string output, bool append = true )
         {
             string AppPath = AppDomain.CurrentDomain.BaseDirectory;
@@ -242,12 +241,6 @@ namespace NGettextUtils
                 headerLines.AppendLine( string.Format( s, catalog, pot_date, pot_translator, pot_team ) );
             }
 
-            //StringBuilder polines = new StringBuilder();
-            //foreach ( string line in lines )
-            //{
-            //    polines.AppendLine( line );
-            //}
-            StringBuilder polines = lines;
             string fo = string.Empty;
             if ( string.IsNullOrEmpty( output ) )
             {
@@ -260,7 +253,7 @@ namespace NGettextUtils
             if ( File.Exists( fo ) && append )
             {
                 StreamWriter pofile = new StreamWriter( fo, true, new UTF8Encoding( false ) );
-                pofile.WriteLine( polines );
+                pofile.WriteLine( lines );
                 pofile.Close();
             }
             else
@@ -268,7 +261,7 @@ namespace NGettextUtils
                 StreamWriter pofile = new StreamWriter( fo, false, new UTF8Encoding( false ) );
                 pofile.WriteLine( headerLines );
                 pofile.WriteLine( "" );
-                pofile.WriteLine( polines );
+                pofile.WriteLine( lines );
                 pofile.Close();
             }
             return fo;
@@ -285,7 +278,6 @@ namespace NGettextUtils
         {
             List<string> lines = new List<string>();
 
-            // Dictionary<string, int> msgids = new Dictionary<string, int>();
             Dictionary<string, List<string>> msgids = new Dictionary<string, List<string>>();
 
             foreach ( string resx in resxfiles )
@@ -324,23 +316,14 @@ namespace NGettextUtils
                                     lineNumber = ( (IXmlLineInfo) child ).LineNumber;
                                 }
 
-                                string msgid = child.Value.Replace( "\\", "\\\\" );
+                                string msgid = child.Value.Replace( "\\", "\\\\" ).Replace("\"", "\\\"");
                                 if ( msgids.ContainsKey( msgid ) )
                                 {
-                                    //int index = -1;
-                                    //msgids.TryGetValue( msgid, out index );
-                                    //lines.Insert( index, string.Format( "#: {0}:{1} -> {2}.{3}", resx, lineNumber, nodeName, child.Name ) );
-                                    //msgids[msgid] = index + 1;
                                     int index = msgids[msgid].Count - 2;
                                     msgids[msgid].Insert( index, string.Format( "#: {0}:{1} -> {2}.{3}", resx, lineNumber, nodeName, child.Name ) );
                                 }
                                 else
                                 {
-                                    //lines.Add( "" );
-                                    //lines.Add( string.Format( "#: {0}:{1} -> {2}.{3}", resx, lineNumber, nodeName, child.Name ) );
-                                    //lines.Add( string.Format( "msgid \"{0}\"", msgid ) );
-                                    //lines.Add( "msgstr \"\"" );
-                                    //msgids.Add( msgid, lines.Count - 2 );
                                     msgids[msgid] = new List<string>();
                                     msgids[msgid].Add( string.Format( "#: {0}:{1} -> {2}.{3}", resx, lineNumber, nodeName, child.Name ) );
                                     msgids[msgid].Add( string.Format( "msgid \"{0}\"", msgid ) );
@@ -354,78 +337,6 @@ namespace NGettextUtils
             return WritePOT( msgids, catalog, output, append );
         }
 
-        public static string xaml2po( string xaml, string catalog = null )
-        {
-            if ( !string.IsNullOrEmpty( xaml ) && File.Exists( xaml ) )
-            {
-                if ( string.IsNullOrEmpty( catalog ) )
-                {
-                    catalog = Path.GetFileNameWithoutExtension( xaml );
-                }
-                DateTime nt = DateTime.Now;
-                TimeZone nz = TimeZone.CurrentTimeZone;
-                TimeSpan no = nz.GetUtcOffset( nt );
-
-                string symbol = "+";
-                if ( no.ToString().StartsWith( "-" ) )
-                {
-                    symbol = "-";
-                }
-
-                string   pot_date = string.Format( "{0:yyyy-MM-dd HH:mm}{3}{1:00}{2:00}", nt, no.Hours, no.Minutes, symbol );
-                string pot_translator = poTranslator;
-                string pot_team = poTeam;
-
-                StringBuilder lines = new StringBuilder();
-                foreach ( string s in po_header )
-                {
-                    lines.AppendLine( string.Format( s, catalog, pot_date, pot_translator, pot_team ) );
-                }
-
-                XDocument xmldoc = XDocument.Load( xaml );
-
-                foreach ( XElement element in xmldoc.Descendants() )
-                {
-
-                    foreach ( string tn in xaml_inner_tran )
-                    {
-                        if ( string.Equals( tn, element.Name.ToString(), StringComparison.InvariantCultureIgnoreCase ) )
-                        {
-                            if ( !string.IsNullOrEmpty( element.Value ) )
-                            {
-                                lines.AppendLine( string.Format( "\n#: {0}: node -> {1}", xaml, element.Name ) );
-                                lines.AppendLine( string.Format( "msgid \"{0}\"", element.Value ) );
-                                lines.AppendLine( "msgstr \"\"" );
-                            }
-                            break;
-                        }
-                    }
-
-                    foreach ( XAttribute attr in element.Attributes() )
-                    {
-                        foreach ( string an in xaml_attr_tran )
-                        {
-                            if ( string.Equals( an, attr.Name.ToString(), StringComparison.InvariantCultureIgnoreCase ) )
-                            {
-                                if ( !string.IsNullOrEmpty( attr.Value ) )
-                                {
-                                    lines.AppendLine( string.Format( "\n#: {0}: node -> {1}", xaml, attr.Name ) );
-                                    lines.AppendLine( string.Format( "msgid \"{0}\"", attr.Value ) );
-                                    lines.AppendLine( "msgstr \"\"" );
-                                }
-                                break;
-                            }
-                        }
-                    }
-                }
-                string AppPath = Path.GetDirectoryName( xaml );
-                StreamWriter pofile = new StreamWriter( string.Format( "{0}\\{1}.pot", AppPath, catalog ), false, new UTF8Encoding( true ) );
-                pofile.WriteLine( lines );
-                pofile.Close();
-            }
-            return null;
-        }
-
         public static string xaml2po( string xaml, string catalog = null, string output =null, bool append = true )
         {
             List<string> xamlfiles = new List<string>();
@@ -437,7 +348,6 @@ namespace NGettextUtils
         {
             List<string> lines = new List<string>();
 
-            //Dictionary<string, int> msgids = new Dictionary<string, int>();
             Dictionary<string, List<string>> msgids = new Dictionary<string, List<string>>();
 
             foreach ( string xaml in xamlfiles )
@@ -475,20 +385,11 @@ namespace NGettextUtils
                                     string msgid = element.Value.Replace( "\\", "\\\\" );
                                     if ( msgids.ContainsKey( element.Value ) )
                                     {
-                                        //int index = -1;
-                                        //msgids.TryGetValue( msgid, out index );
-                                        //lines.Insert( index, string.Format( "#: {0}:{1} -> {2}.{3}", xaml, lineNumber, nodeName ) );
-                                        //msgids[msgid] = index + 1;
                                         int index = msgids[msgid].Count - 2;
                                         msgids[msgid].Insert( index, string.Format( "#: {0}:{1} -> {2}.{3}", xaml, lineNumber, nodeName ) );
                                     }
                                     else
                                     {
-                                        //lines.Add( "" );
-                                        //lines.Add( string.Format( "#: {0}:{1} -> {2}.{3}", xaml, lineNumber, nodeName ) );
-                                        //lines.Add( string.Format( "msgid \"{0}\"", msgid ) );
-                                        //lines.Add( "msgstr \"\"" );
-                                        //msgids.Add( msgid, lines.Count - 2 );
                                         msgids[msgid] = new List<string>();
                                         msgids[msgid].Add( string.Format( "#: {0}:{1} -> {2}.{3}", xaml, lineNumber, nodeName ) );
                                         msgids[msgid].Add( string.Format( "msgid \"{0}\"", msgid ) );
@@ -510,20 +411,11 @@ namespace NGettextUtils
                                         string msgid = attr.Value.Replace( "\\", "\\\\" );
                                         if ( msgids.ContainsKey( attr.Value ) )
                                         {
-                                            //int index = -1;
-                                            //msgids.TryGetValue( msgid, out index );
-                                            //lines.Insert( index, string.Format( "#: {0}:{1} -> {2}.{3}", xaml, lineNumber, nodeName, attr.Name ) );
-                                            //msgids[msgid] = index + 1;
                                             int index = msgids[msgid].Count - 2;
                                             msgids[msgid].Insert( index, string.Format( "#: {0}:{1} -> {2}.{3}", xaml, lineNumber, nodeName, attr.Name ) );
                                         }
                                         else
                                         {
-                                            //lines.Add( "" );
-                                            //lines.Add( string.Format( "#: {0}:{1} -> {2}.{3}", xaml, lineNumber, nodeName, attr.Name ) );
-                                            //lines.Add( string.Format( "msgid \"{0}\"", msgid ) );
-                                            //lines.Add( "msgstr \"\"" );
-                                            //msgids.Add( msgid, lines.Count - 2 );
                                             msgids[msgid] = new List<string>();
                                             msgids[msgid].Add( string.Format( "#: {0}:{1} -> {2}.{3}", xaml, lineNumber, nodeName, attr.Name ) );
                                             msgids[msgid].Add( string.Format( "msgid \"{0}\"", msgid ) );
@@ -551,7 +443,6 @@ namespace NGettextUtils
         {
             List<string> lines = new List<string>();
 
-            //Dictionary<string, int> msgids = new Dictionary<string, int>();
             Dictionary<string, List<string>> msgids = new Dictionary<string, List<string>>();
 
             foreach ( string cs in csfiles )
@@ -579,29 +470,19 @@ namespace NGettextUtils
                                     int pos = line.IndexOf( findstr, StringComparison.InvariantCultureIgnoreCase );
                                     if ( pos >= 0 )
                                     {
-                                        //String Value_tmp = line.Substring( pos + findstr.Length ).TrimStart( trimSymbol ).TrimEnd( trimSymbol );
                                         findstr = ", \"";
                                         pos = line.IndexOf( findstr, pos + 1 );
                                         if ( pos >= 0 )
                                         {
-                                            string msgid = line.Remove(line.Length-3).Substring( pos + findstr.Length );//.TrimStart( trimSymbol ).TrimEnd( trimSymbol );
+                                            string msgid = line.Remove(line.Length-3).Substring( pos + findstr.Length );
                                             if ( string.IsNullOrEmpty( msgid ) ) continue;
                                             if ( msgids.ContainsKey( msgid ) )
                                             {
-                                                //int index = -1;
-                                                //msgids.TryGetValue( msgid, out index );
-                                                //lines.Insert( index, string.Format( "#: {0}:{1}", cs, lineNumber ) );
-                                                //msgids[msgid] = index + 1;
                                                 int index = msgids[msgid].Count - 2;
                                                 msgids[msgid].Insert( index, string.Format( "#: {0}:{1}", cs, lineNumber ) );
                                             }
                                             else
                                             {
-                                                //lines.Add( "" );
-                                                //lines.Add( string.Format( "#: {0}:{1}", cs, lineNumber ) );
-                                                //lines.Add( string.Format( "msgid \"{0}\"", Value ) );
-                                                //lines.Add( "msgstr \"\"" );
-                                                //msgids.Add( Value, lines.Count - 2 );
                                                 msgids[msgid] = new List<string>();
                                                 msgids[msgid].Add( string.Format( "#: {0}:{1}", cs, lineNumber ) );
                                                 msgids[msgid].Add( string.Format( "msgid \"{0}\"", msgid ) );
@@ -621,20 +502,11 @@ namespace NGettextUtils
                                         if ( string.IsNullOrEmpty( msgid ) ) continue;
                                         if ( msgids.ContainsKey( msgid ) )
                                         {
-                                            //int index = -1;
-                                            //msgids.TryGetValue( Value, out index );
-                                            //lines.Insert( index, string.Format( "#: {0}:{1}", cs, lineNumber ) );
-                                            //msgids[Value] = index + 1;
                                             int index = msgids[msgid].Count - 2;
                                             msgids[msgid].Insert( index, string.Format( "#: {0}:{1}", cs, lineNumber ) );
                                         }
                                         else
                                         {
-                                            //lines.Add( "" );
-                                            //lines.Add( string.Format( "#: {0}:{1}", cs, lineNumber ) );
-                                            //lines.Add( string.Format( "msgid \"{0}\"", Value ) );
-                                            //lines.Add( "msgstr \"\"" );
-                                            //msgids.Add( Value, lines.Count - 2 );
                                             msgids[msgid] = new List<string>();
                                             msgids[msgid].Add( string.Format( "#: {0}:{1}", cs, lineNumber ) );
                                             msgids[msgid].Add( string.Format( "msgid \"{0}\"", msgid ) );
