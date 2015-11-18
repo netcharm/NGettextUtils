@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -346,6 +347,27 @@ namespace NGettext.WinForm
                         {
                             Translate(Item, tooltip);
                         }
+                    }
+                }
+                else if (
+                    ( objtype.IndexOf( "Forms.ComboBox", StringComparison.InvariantCultureIgnoreCase ) >= 0 )
+                        )
+                {
+                    ComboBox comboBox = myObject as ComboBox;
+                    ComboBox.ObjectCollection oldItems = comboBox.Items as ComboBox.ObjectCollection;
+                    List<string> newItems = new List<string>();
+                    if ( oldItems != null )
+                    {
+                        try
+                        {
+                            foreach ( string Item in oldItems )
+                            {
+                                newItems.Add( _( Item ) );
+                            }
+                            comboBox.Items.Clear();
+                            comboBox.Items.AddRange( newItems.ToArray() );
+                        }
+                        catch { }
                     }
                 }
                 else if (myObject != null)
