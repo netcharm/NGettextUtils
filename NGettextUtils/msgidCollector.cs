@@ -833,7 +833,10 @@ namespace NGettextUtils
 
             if ( !startInfo.UseShellExecute )
             {
-                if ( !gettext.WaitForExit( 5000 ) ) gettext.Kill();
+                if ( wait )
+                {
+                    if ( !gettext.WaitForExit( 5000 ) ) gettext.Kill();
+                }
 
                 if ( startInfo.RedirectStandardOutput )
                 {
