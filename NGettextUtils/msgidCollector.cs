@@ -111,7 +111,7 @@ namespace NGettextUtils
         private static string[] resx_tags  = new string[] {"data" };
         private static string[] resx_attr_tran  = new string[] {"value" };
 
-        private static string[] form_attr_tran  = new string[] { "Title", "content", "text", "header", "SetToolTip", "ToolTipText", "Filter" };
+        private static string[] form_attr_tran  = new string[] { "Title", "content", "text", "header", "SetToolTip", "ToolTipText", "Filter", "Items.AddRange" };
         private static string[] form_inner_tran  = new string[] { "TextBlock" };
         #endregion
         
@@ -464,7 +464,46 @@ namespace NGettextUtils
                             lineNumber++;
                             foreach ( string an in form_attr_tran )
                             {
-                                if ( string.Equals( "SetToolTip", an, StringComparison.InvariantCultureIgnoreCase ) )
+                                if ( string.Equals( "Items.AddRange", an, StringComparison.InvariantCultureIgnoreCase ) )
+                                {
+                                    char[] ls = {'\"'};
+                                    char[] le = {',', ' ', '\"', '}', ')', ';' };
+
+                                    if ( line.TrimEnd().EndsWith( "});" ) ) continue;
+
+                                    string findstr = string.Format( ".Items.AddRange(" );
+                                    int pos = line.IndexOf( findstr, StringComparison.InvariantCultureIgnoreCase );
+
+                                    findstr = "});";
+
+                                    while ( pos > 0 )
+                                    {
+                                        line = csfile.ReadLine();
+                                        lineNumber++;
+                                        if ( line.TrimStart().IndexOf( "\"", StringComparison.InvariantCultureIgnoreCase ) != 0 )
+                                        {
+                                            if ( line.TrimEnd().EndsWith( "});" ) ) break;
+                                            continue;
+                                        }
+
+                                        string msgid = line.TrimEnd( le ).Trim(le);
+                                        if ( string.IsNullOrEmpty( msgid ) ) continue;
+                                        if ( msgids.ContainsKey( msgid ) )
+                                        {
+                                            int index = msgids[msgid].Count - 2;
+                                            msgids[msgid].Insert( index, string.Format( "#: {0}:{1}", cs, lineNumber ) );
+                                        }
+                                        else
+                                        {
+                                            msgids[msgid] = new List<string>();
+                                            msgids[msgid].Add( string.Format( "#: {0}:{1}", cs, lineNumber ) );
+                                            msgids[msgid].Add( string.Format( "msgid \"{0}\"", msgid ) );
+                                            msgids[msgid].Add( "msgstr \"\"" );
+                                        }
+                                        if ( line.TrimEnd().EndsWith( "});") ) break;
+                                    }                                    
+                                }
+                                else if ( string.Equals( "SetToolTip", an, StringComparison.InvariantCultureIgnoreCase ) )
                                 {
                                     string findstr = string.Format( ".SetToolTip(" );
                                     int pos = line.IndexOf( findstr, StringComparison.InvariantCultureIgnoreCase );
