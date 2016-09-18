@@ -104,12 +104,12 @@ namespace NGettextUtils
         #endregion
 
         #region tag for extract string
-        private static string[] xaml_tags  = new string[] {"title", "content", "text", "header", "tooltip"};
-        private static string[] xaml_attr_tran  = new string[] {"Title", "content", "text", "header", "tooltip"};
+        private static string[] xaml_tags  = new string[] { "title", "content", "text", "header", "tooltip"};
+        private static string[] xaml_attr_tran  = new string[] { "Title", "content", "text", "header", "tooltip"};
         private static string[] xaml_inner_tran  = new string[] { "TextBlock" };
 
-        private static string[] resx_tags  = new string[] {"data" };
-        private static string[] resx_attr_tran  = new string[] {"value" };
+        private static string[] resx_tags  = new string[] { "data" };
+        private static string[] resx_attr_tran  = new string[] { "value" };
 
         private static string[] form_attr_tran  = new string[] { "Title", "content", "text", "header", "SetToolTip", "ToolTipText", "Filter", "Items.AddRange" };
         private static string[] form_inner_tran  = new string[] { "TextBlock" };
@@ -293,6 +293,7 @@ namespace NGettextUtils
                         }
                         if ( !element.HasElements ) continue;
 
+                        bool ignore = false;
                         string nodeName = string.Empty;
                         foreach ( XAttribute attr in element.Attributes() )
                         {
@@ -300,7 +301,17 @@ namespace NGettextUtils
                             {
                                 nodeName = attr.Value;
                             }
+                            else if ( string.Equals( "Type", attr.Name.LocalName.ToString(), StringComparison.InvariantCultureIgnoreCase ) )
+                            {
+                                if(attr.Value.Contains( "System.Drawing.Bitmap" ))
+                                {
+                                    ignore = true;
+                                    break;
+                                }
+                            }
                         }
+                        if ( ignore ) continue;
+
                         if ( string.IsNullOrEmpty( nodeName ) )
                         {
                             nodeName = element.Name.LocalName;

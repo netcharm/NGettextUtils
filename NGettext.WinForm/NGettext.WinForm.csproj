@@ -51,6 +51,9 @@
     <PostBuildEvent>xcopy /D /S /I /Y  "$(TargetDir)$(TargetFileName)" "$(SolutionDir)..\_refs"
 xcopy /D /S /I /Y  "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)..\_refs"</PostBuildEvent>
   </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>"D:\Develop\MS\AutoIncBuildNumber.exe" "$(ProjectDir)"</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
