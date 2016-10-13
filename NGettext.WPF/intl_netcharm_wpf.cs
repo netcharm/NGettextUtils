@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Globalization;
+using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Windows;
@@ -19,8 +20,13 @@ namespace NGettext.WPF
         private static ICatalog _catalog = null;
         private static string defaultDomain = Assembly.GetExecutingAssembly().GetName().Name;
         private static CultureInfo defaultCulture = Thread.CurrentThread.CurrentUICulture;
-        private static string defaultPath = AppDomain.CurrentDomain.BaseDirectory + "locale";
+        private static string defaultPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "locale");
 
+        private ICatalog s_catalog = null;
+        public ICatalog Catalog
+        {
+            get { return ( s_catalog ); }
+        }
 
         /// <summary>
         /// Constructor.
@@ -32,10 +38,41 @@ namespace NGettext.WPF
             Translate(myObject);
         }
 
+        public I18N( string domain, string path, object myObject )
+        {
+            ICatalog catalog = BindDomain( domain, path, defaultCulture.IetfLanguageTag );
+            Translate( catalog, myObject );
+            s_catalog = catalog;
+        }
+
+        public I18N( string domain, string path, string culture, object myObject )
+        {
+            ICatalog catalog = BindDomain( domain, path, culture );
+            Translate( catalog, myObject );
+            s_catalog = catalog;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="domain"></param>
+        /// <param name="myObject"></param>
         public static void L10N( string domain, object myObject)
         {
             BindDomain(domain);
             Translate(myObject);
+        }
+
+        public static void L10N( string domain, string path, object myObject )
+        {
+            ICatalog catalog = BindDomain( domain, path, defaultCulture.IetfLanguageTag );
+            Translate( catalog, myObject );
+        }
+
+        public static void L10N( string domain, string path, string culture, object myObject )
+        {
+            ICatalog catalog = BindDomain( domain, path, culture );
+            Translate( catalog, myObject );
         }
 
         /// <summary>
@@ -92,7 +129,14 @@ namespace NGettext.WPF
             else
                 return t;
         }
-        
+        public static string GetString( ICatalog catalog, string t )
+        {
+            if ( catalog is Catalog )
+                return catalog.GetString( t );
+            else
+                return t;
+        }
+
         /// <summary>
         /// Looks up a localized string.
         /// </summary>
@@ -101,6 +145,10 @@ namespace NGettext.WPF
         public static string GetText(string t)
         {
             return GetString( t );
+        }
+        public static string GetText( ICatalog catalog, string t )
+        {
+            return catalog.GetString( t );
         }
 
         /// <summary>
@@ -112,6 +160,10 @@ namespace NGettext.WPF
         {
             return GetString( t );
         }
+        public static string T( ICatalog catalog, string t )
+        {
+            return catalog.GetString( t );
+        }
 
         /// <summary>
         /// Looks up a localized string.
@@ -121,6 +173,10 @@ namespace NGettext.WPF
         public static string _(string t)
         {
             return GetString( t );
+        }
+        public static string _( ICatalog catalog, string t )
+        {
+            return catalog.GetString( t );
         }
 
         /// <summary>
@@ -133,6 +189,10 @@ namespace NGettext.WPF
         {
             return _catalog.GetString( text, args );
         }
+        public static string _( ICatalog catalog, string text, params object[] args )
+        {
+            return catalog.GetString( text, args );
+        }
 
         /// <summary>
         /// 
@@ -144,6 +204,10 @@ namespace NGettext.WPF
         public static string _n( string text, string pluralText, long n )
         {
             return _catalog.GetPluralString( text, pluralText, n );
+        }
+        public static string _n( ICatalog catalog, string text, string pluralText, long n )
+        {
+            return catalog.GetPluralString( text, pluralText, n );
         }
 
         /// <summary>
@@ -158,6 +222,10 @@ namespace NGettext.WPF
         {
             return _catalog.GetPluralString( text, pluralText, n, args );
         }
+        public static string _n( ICatalog catalog, string text, string pluralText, long n, params object[] args )
+        {
+            return catalog.GetPluralString( text, pluralText, n, args );
+        }
 
         /// <summary>
         /// 
@@ -168,6 +236,10 @@ namespace NGettext.WPF
         public static string _p( string context, string text )
         {
             return _catalog.GetParticularString( context, text );
+        }
+        public static string _p( ICatalog catalog, string context, string text )
+        {
+            return catalog.GetParticularString( context, text );
         }
 
         /// <summary>
@@ -180,6 +252,10 @@ namespace NGettext.WPF
         public static string _p( string context, string text, params object[] args )
         {
             return _catalog.GetParticularString( context, text, args );
+        }
+        public static string _p( ICatalog catalog, string context, string text, params object[] args )
+        {
+            return catalog.GetParticularString( context, text, args );
         }
 
         /// <summary>
@@ -194,6 +270,10 @@ namespace NGettext.WPF
         {
             return _catalog.GetParticularPluralString( context, text, pluralText, n );
         }
+        public static string _pn( ICatalog catalog, string context, string text, string pluralText, long n )
+        {
+            return catalog.GetParticularPluralString( context, text, pluralText, n );
+        }
 
         /// <summary>
         /// 
@@ -207,6 +287,10 @@ namespace NGettext.WPF
         public static string _pn( string context, string text, string pluralText, long n, params object[] args )
         {
             return _catalog.GetParticularPluralString( context, text, pluralText, n, args );
+        }
+        public static string _pn( ICatalog catalog, string context, string text, string pluralText, long n, params object[] args )
+        {
+            return catalog.GetParticularPluralString( context, text, pluralText, n, args );
         }
 
         /// <summary>
@@ -249,6 +333,48 @@ namespace NGettext.WPF
                             if (propValue != null)
                             {
                                 prop.SetValue(myObject, _(propValue), null);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public static void Translate( ICatalog catalog, object myObject )
+        {
+            string[] propList = { "Title", "Content", "Text", "Header", "ToolTip" };
+
+            PropertyInfo prop = null;
+            string propValue = null;
+
+            Type objType = myObject.GetType();
+
+            if ( myObject is DependencyObject )
+            {
+                IEnumerable myChildren = LogicalTreeHelper.GetChildren(myObject as DependencyObject);
+                foreach ( object child in myChildren )
+                {
+                    Translate( catalog, child );
+                }
+            }
+
+            if ( objType != null )
+            {
+                foreach ( string PropName in propList )
+                {
+                    prop = null;
+                    propValue = null;
+
+                    prop = objType.GetProperty( PropName );
+                    if ( ( prop != null ) && ( prop.CanRead ) && ( prop.CanWrite ) )
+                    {
+                        //if ( (prop.PropertyType.Name == "String") || (prop.GetValue( myObject, null ) is String))
+                        if ( prop.GetValue( myObject, null ) is string )
+                        {
+                            propValue = prop.GetValue( myObject, null ).ToString();
+                            if ( propValue != null )
+                            {
+                                prop.SetValue( myObject, _( catalog, propValue ), null );
                             }
                         }
                     }
