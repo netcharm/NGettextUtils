@@ -33,6 +33,23 @@ namespace NGettext.WinForm
         /// Constructor.
         /// </summary>
         /// <param name="domain">the locale domain, and form object</param>
+        public I18N( string domain)
+        {
+            BindDomain( domain );
+        }
+
+        public I18N( string domain, string path )
+        {
+            ICatalog catalog = BindDomain( domain, path, defaultCulture.IetfLanguageTag );
+            s_catalog = catalog;
+        }
+
+        public I18N( string domain, string path, string culture)
+        {
+            ICatalog catalog = BindDomain( domain, path, culture );
+            s_catalog = catalog;
+        }
+
         public I18N( string domain, object myObject)
         {
             BindDomain(domain);
@@ -118,6 +135,21 @@ namespace NGettext.WinForm
         /// </summary>
         /// <param name="domain"></param>
         /// <param name="myObject"></param>
+        public static void L10N( string domain )
+        {
+            BindDomain( domain );
+        }
+
+        public static void L10N( string domain, string path )
+        {
+            ICatalog catalog = BindDomain( domain, path, defaultCulture.IetfLanguageTag );
+        }
+
+        public static void L10N( string domain, string path, string culture )
+        {
+            ICatalog catalog = BindDomain( domain, path, culture );
+        }
+
         public static void L10N( string domain, object myObject)
         {
             BindDomain(domain);

@@ -501,6 +501,7 @@ namespace NGettextUtils
                             {
                                 if ( string.Equals( "Items.AddRange", an, StringComparison.InvariantCultureIgnoreCase ) )
                                 {
+                                    #region AddRange value
                                     char[] ls = {'\"'};
                                     char[] le = {',', ' ', '\"', '}', ')', ';' };
 
@@ -536,10 +537,12 @@ namespace NGettextUtils
                                             msgids[msgid].Add( "msgstr \"\"" );
                                         }
                                         if ( line.TrimEnd().EndsWith( "});") ) break;
-                                    }                                    
+                                    }
+                                    #endregion
                                 }
                                 else if ( string.Equals( "SetToolTip", an, StringComparison.InvariantCultureIgnoreCase ) )
                                 {
+                                    #region SetToolTip
                                     string findstr = string.Format( ".SetToolTip(" );
                                     int pos = line.IndexOf( findstr, StringComparison.InvariantCultureIgnoreCase );
                                     if ( pos >= 0 )
@@ -565,13 +568,21 @@ namespace NGettextUtils
                                             break;
                                         }
                                     }
+                                    #endregion
                                 }
                                 else
                                 {
+                                    #region Others
                                     string findstr = string.Format( ".{0} = ", an );
                                     int pos = line.IndexOf( findstr, StringComparison.InvariantCultureIgnoreCase );
                                     if ( pos >= 0 )
                                     {
+                                        while ( !line.TrimEnd().EndsWith( ";" ) || line == null )
+                                        {
+                                            line = line.TrimEnd() + csfile.ReadLine().Trim();
+                                            lineNumber++;
+                                        }
+                                        line = line.Replace( "\" +\"", "" );
                                         string msgid = line.Substring( pos + findstr.Length ).TrimStart( trimSymbol ).TrimEnd( trimSymbol );
                                         if ( string.IsNullOrEmpty( msgid ) ) continue;
                                         if ( msgids.ContainsKey( msgid ) )
@@ -588,6 +599,7 @@ namespace NGettextUtils
                                         }
                                         break;
                                     }
+                                    #endregion
                                 }
                             }
                         }
@@ -1147,11 +1159,11 @@ namespace NGettextUtils
                     }
                 }
 
-                bool AutoGen = false;
                 XmlNodeList childs = null;
                 elements = xmldoc.GetElementsByTagName( "Compile" );
                 foreach ( XmlElement element in elements )
                 {
+                    bool AutoGen = false;
                     childs = element.GetElementsByTagName( "AutoGen" );
                     foreach ( XmlElement child in childs )
                     {
