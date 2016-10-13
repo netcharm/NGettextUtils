@@ -111,7 +111,7 @@ namespace NGettextUtils
         private static string[] resx_tags  = new string[] { "data" };
         private static string[] resx_attr_tran  = new string[] { "value" };
 
-        private static string[] form_attr_tran  = new string[] { "Title", "content", "text", "header", "SetToolTip", "ToolTipText", "Filter", "Items.AddRange" };
+        private static string[] form_attr_tran  = new string[] { "Title", "content", "text", "header", "caption", "SetToolTip", "ToolTipText", "Filter", "Items.AddRange", "RecentItemsCaption" };
         private static string[] form_inner_tran  = new string[] { "TextBlock" };
         #endregion
         
@@ -299,11 +299,30 @@ namespace NGettextUtils
                         {
                             if ( string.Equals( "Name", attr.Name.LocalName.ToString(), StringComparison.InvariantCultureIgnoreCase ) )
                             {
-                                nodeName = attr.Value;
+                                if ( attr.Value.EndsWith( ".Type", StringComparison.CurrentCultureIgnoreCase ) ||
+                                    attr.Value.EndsWith( ".Name", StringComparison.CurrentCultureIgnoreCase ) )
+                                {
+                                    ignore = true;
+                                    break;
+                                }
+                                else if ( attr.Value.EndsWith( "Text", StringComparison.CurrentCultureIgnoreCase ) ||
+                                    attr.Value.EndsWith( "Caption", StringComparison.CurrentCultureIgnoreCase ) ||
+                                    attr.Value.EndsWith( "Title", StringComparison.CurrentCultureIgnoreCase ) ||
+                                    attr.Value.EndsWith( "Header", StringComparison.CurrentCultureIgnoreCase ) ||
+                                    attr.Value.EndsWith( "Footer", StringComparison.CurrentCultureIgnoreCase ) ||
+                                    attr.Value.EndsWith( "Tooltip", StringComparison.CurrentCultureIgnoreCase ) )
+                                {
+                                    nodeName = attr.Value;
+                                }
+                                else
+                                {
+                                    ignore = true;
+                                    break;
+                                }
                             }
                             else if ( string.Equals( "Type", attr.Name.LocalName.ToString(), StringComparison.InvariantCultureIgnoreCase ) )
                             {
-                                if(attr.Value.Contains( "System.Drawing.Bitmap" ))
+                                if ( attr.Value.Contains( "System.Drawing.Bitmap" ) )
                                 {
                                     ignore = true;
                                     break;
@@ -321,6 +340,11 @@ namespace NGettextUtils
                         {
                             if ( string.Equals( child.Name.LocalName, "value", StringComparison.InvariantCultureIgnoreCase ) )
                             {
+                                if ( child.Value.Contains( ";System.Drawing.Bitmap, System.Drawing," ) )
+                                {
+                                    continue;
+                                }
+
                                 int lineNumber = -1;
                                 if ( ( (IXmlLineInfo) child ).HasLineInfo() )
                                 {
