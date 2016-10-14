@@ -52,7 +52,9 @@ namespace NGettextUtils
 
     static class msgidCollector
     {
-        private static char[] trimSymbol = new char[] { '\"', ';', '(', ')', '{', '}' };
+        //private static char[] trimSymbol = new char[] { '\"', ';', '(', ')', '{', '}' };
+        private static char[] trimSymbol = new char[] { ';', '(', ')', '{', '}' };
+        private static char[] trimSymbol2 = new char[] { '\"' };
         //private static char[] trimSymbol = new char[] { ';', '(', ')', '{', '}' };
         #region common po file header
 
@@ -579,11 +581,11 @@ namespace NGettextUtils
                                     {
                                         while ( !line.TrimEnd().EndsWith( ";" ) || line == null )
                                         {
-                                            line = line.TrimEnd() + csfile.ReadLine().Trim();
+                                            line = line.TrimEnd() + csfile.ReadLine().Trim().Replace( "\" +\"", "" );
                                             lineNumber++;
                                         }
-                                        line = line.Replace( "\" +\"", "" );
                                         string msgid = line.Substring( pos + findstr.Length ).TrimStart( trimSymbol ).TrimEnd( trimSymbol );
+                                        msgid = msgid.TrimStart( trimSymbol2 ).TrimEnd( trimSymbol2 );
                                         if ( string.IsNullOrEmpty( msgid ) ) continue;
                                         if ( msgids.ContainsKey( msgid ) )
                                         {
