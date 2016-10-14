@@ -633,7 +633,7 @@ namespace NGettextUtils
             //args.Add( "--force-po" );
             args.Add( "--no-wrap" );
             args.Add( "--omit-header" );
-            args.Add( "--keyword=_" );
+            args.Add( "--keyword=_ --keyword=T --keyword=_T" );
             if ( string.Compare( GettextVersion, "0.17" ) >= 0 )
             {
                 args.Add( string.Format( "--package-name={0}", catalog ) );

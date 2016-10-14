@@ -670,15 +670,13 @@ namespace NGettext.WinForm
                 if ( objtype.IndexOf( "Forms.ToolStripContainer", StringComparison.InvariantCultureIgnoreCase ) >= 0 )
                 {
                     //continue;
-                }
-                /*
-     System.Windows.Forms.ColorDialog 
-     System.Windows.Forms.FileDialog 
-     System.Windows.Forms.FolderBrowserDialog 
-     System.Windows.Forms.FontDialog 
-     System.Windows.Forms.PageSetupDialog 
-     System.Windows.Forms.PrintDialog                      
-            */
+                }                   
+                //System.Windows.Forms.ColorDialog 
+                //System.Windows.Forms.FileDialog 
+                //System.Windows.Forms.FolderBrowserDialog 
+                //System.Windows.Forms.FontDialog 
+                //System.Windows.Forms.PageSetupDialog 
+                //System.Windows.Forms.PrintDialog                                          
                 else if (
                     ( objtype.IndexOf( "Forms.OpenFileDialog", StringComparison.InvariantCultureIgnoreCase ) >= 0 ) ||
                     ( objtype.IndexOf( "Forms.SaveFileDialog", StringComparison.InvariantCultureIgnoreCase ) >= 0 )
@@ -811,10 +809,14 @@ namespace NGettext.WinForm
                             }
                             if ( tooltip != null )
                             {
-                                if ( !string.IsNullOrEmpty( obj.Text ) )
+                                if( !string.IsNullOrEmpty(tooltip.ToolTipTitle ))
                                 {
-                                    tooltip.ToolTipTitle = obj.Text;
+                                    tooltip.ToolTipTitle = _( tooltip.ToolTipTitle );
                                 }
+                                //if ( !string.IsNullOrEmpty( obj.Text ) )
+                                //{
+                                //    tooltip.ToolTipTitle = obj.Text;
+                                //}
                                 tooltip.SetToolTip( obj, _( catalog, tooltip.GetToolTip( obj ) ).Replace( "\\n", "\n" ) );
                             }
                             //try
